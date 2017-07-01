@@ -16,6 +16,7 @@ class SettingsEmbeddedTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.reloadData()
         setupSettings()
     }
     
@@ -38,10 +39,12 @@ class SettingsEmbeddedTableViewController: UITableViewController {
     
     func highlightSaveTimeSection(row: Int) {
         let indexPath = IndexPath(row: row, section: 0)
+        
         let cell = tableView.cellForRow(at: indexPath)
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor.myBlue
         cell?.selectedBackgroundView = backgroundView
+        cell?.isSelected = true
         
         switch row {
         case 0: SettingsController.sharedController.setTimeSetting(timeSetting: .twentySeconds)
@@ -58,7 +61,8 @@ class SettingsEmbeddedTableViewController: UITableViewController {
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor.myBlue
         cell?.selectedBackgroundView = backgroundView
-        
+        cell?.isSelected = true
+
         switch row {
         case 0: SettingsController.sharedController.setDistanceSetting(distanceSetting: .feet)
         case 1: SettingsController.sharedController.setDistanceSetting(distanceSetting: .meters)
