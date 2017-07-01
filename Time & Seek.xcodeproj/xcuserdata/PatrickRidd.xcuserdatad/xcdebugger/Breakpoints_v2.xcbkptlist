@@ -154,12 +154,12 @@
                   moduleName = "Time &amp; Seek"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/Time%20&amp;%20Seek/HiderViewController.swift"
-                  timestampString = "520201196.901021"
+                  timestampString = "520368135.167785"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "258"
                   endingLineNumber = "258"
-                  offsetFromSymbolStart = "53">
+                  offsetFromSymbolStart = "64">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -169,46 +169,14 @@
                   moduleName = "Time &amp; Seek"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/Time%20&amp;%20Seek/HiderViewController.swift"
-                  timestampString = "520201196.902375"
+                  timestampString = "520368135.169213"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "259"
                   endingLineNumber = "259"
-                  offsetFromSymbolStart = "23">
+                  offsetFromSymbolStart = "24">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HiderViewController.swift"
-            timestampString = "519683161.474067"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "173"
-            endingLineNumber = "173"
-            landmarkName = "startButtonPressed(sender:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HiderViewController.swift"
-            timestampString = "519683161.474067"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "169"
-            endingLineNumber = "169"
-            landmarkName = "startButtonPressed(sender:)"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -224,22 +192,6 @@
             startingLineNumber = "304"
             endingLineNumber = "304"
             landmarkName = "updateSatusLabels(beacons:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HiderViewController.swift"
-            timestampString = "519683161.474067"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
-            landmarkName = "updateButtonAndBeaconStatus()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -274,13 +226,19 @@
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            scope = "0"
-            stopOnStyle = "0">
+            filePath = "Time &amp; Seek/SettingsEmbeddedTableViewController.swift"
+            timestampString = "520365841.786851"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "setupSettings()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -290,13 +248,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Time &amp; Seek/SettingsEmbeddedTableViewController.swift"
-            timestampString = "520201167.379355"
+            timestampString = "520366169.68817"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "highlightSaveTimeSection(indexPath:)"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "highlightSaveTimeSection(row:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            scope = "0"
+            stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

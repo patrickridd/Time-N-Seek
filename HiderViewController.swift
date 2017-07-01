@@ -24,7 +24,6 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     
     var isSearching: Bool = false
     var isBroadcasting = false
-    
     var dataDictionary = [String: Any]()
     
     @IBOutlet weak var hideButton:UIButton!

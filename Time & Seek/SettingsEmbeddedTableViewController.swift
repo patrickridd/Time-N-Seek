@@ -16,6 +16,7 @@ class SettingsEmbeddedTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupSettings()
     }
     
     func setupSettings() {
@@ -24,30 +25,25 @@ class SettingsEmbeddedTableViewController: UITableViewController {
         
         
         switch timeSettings {
-        case .twentySeconds:
-            break
-        case.fortySeconds:
-            break
-        case .sixtySeconds:
-            break
+        case .twentySeconds: highlightSaveTimeSection(row: 0)
+        case.fortySeconds: highlightSaveTimeSection(row: 1)
+        case .sixtySeconds: highlightSaveTimeSection(row: 2)
         }
         
         switch distanceSettings {
-        case .feet:
-            break
-        case .meters:
-            
-            break
+        case .feet: highlightSaveDistanceSection(row: 0)
+        case .meters: highlightSaveDistanceSection(row: 1)
         }
     }
     
-    func highlightSaveTimeSection(indexPath: IndexPath) {
+    func highlightSaveTimeSection(row: Int) {
+        let indexPath = IndexPath(row: row, section: 0)
         let cell = tableView.cellForRow(at: indexPath)
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor.myBlue
         cell?.selectedBackgroundView = backgroundView
         
-        switch indexPath.row {
+        switch row {
         case 0: SettingsController.sharedController.setTimeSetting(timeSetting: .twentySeconds)
         case 1: SettingsController.sharedController.setTimeSetting(timeSetting: .fortySeconds)
         case 2: SettingsController.sharedController.setTimeSetting(timeSetting: .sixtySeconds)
@@ -56,13 +52,14 @@ class SettingsEmbeddedTableViewController: UITableViewController {
         
     }
     
-    func highlightSaveDistanceSection(indexPath: IndexPath) {
+    func highlightSaveDistanceSection(row: Int) {
+        let indexPath = IndexPath(row: row, section: 1)
         let cell = tableView.cellForRow(at: indexPath)
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor.myBlue
         cell?.selectedBackgroundView = backgroundView
         
-        switch indexPath.row {
+        switch row {
         case 0: SettingsController.sharedController.setDistanceSetting(distanceSetting: .feet)
         case 1: SettingsController.sharedController.setDistanceSetting(distanceSetting: .meters)
         default: break
@@ -74,9 +71,9 @@ class SettingsEmbeddedTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            highlightSaveTimeSection(indexPath: indexPath)
+            highlightSaveTimeSection(row: indexPath.row)
         } else {
-            highlightSaveDistanceSection(indexPath: indexPath)
+            highlightSaveDistanceSection(row: indexPath.row)
         }
     }
     

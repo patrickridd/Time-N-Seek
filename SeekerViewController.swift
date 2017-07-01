@@ -28,12 +28,21 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     let seekerMajor = "456"
     
     private var timer: Timer?
+    private var timeSetting: TimeSetting = .twentySeconds
+    private var distanceSetting: DistanceSetting = .feet
     private var elapsedTimeInSecond: Int = 20
+    private var startTime: Int = 20
     
     var isSearching = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Get game settings
+        timeSetting = SettingsController.sharedController.getTimeSetting()
+        distanceSetting = SettingsController.sharedController.getDistanceSetting()
+        
+        reloadSeconds()
         seekButton.layer.borderWidth = 1.0
         locationManager = CLLocationManager()
         locationManager.requestAlwaysAuthorization()
@@ -96,7 +105,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         if beacons.count > 0 {
-            if elapsedTimeInSecond == 20 {
+            if elapsedTimeInSecond == self.startTime {
                 vibrate()
                 startTimer()
             }
@@ -147,6 +156,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             locationManager.startUpdatingLocation()
             callback(true)
         } else {
+            self.presentNeedLocationPermission()
             callback(false)
         }
     }
@@ -158,7 +168,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
                     isSearching = true
                 } else {
                     resetGame()
-                    locationManager.requestAlwaysAuthorization()
                 }
             })
         } else {
@@ -176,14 +185,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func updateSatusLabels(beacons: [CLBeacon]) {
         statusLabel.isHidden = false
         guard let beacon = beacons.first else { self.presentCantFindBeacon(); return }
-        let accuracy = String(format: "%.2f", self.metersToFeet(distanceInMeters: beacon.accuracy))
-        statusLabel.text = "Hider is \(accuracy)ft away".localized
         
-      
-        if accuracy < "1.00" {
-            presentUserWon()
-            return
-        }
+        displayDistance(for: beacon)
+        determineIfSeekerWon(distance: beacon.accuracy)
         isSearching = false
         toggleDiscovery()
     }
@@ -252,12 +256,33 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         resetGame()
     }
     
+    func presentBlueToothNotEnabled() {
+        let blueToothAlert = UIAlertController(title: "Bluetooth is Disabled".localized, message: "We need to enable Bluetooth to connect the Hider and Seeker".localized, preferredStyle: .alert)
+        let enableBluetoothAction = UIAlertAction(title: "Enable".localized, style: .default) { (_) in
+            guard let url = URL(string: "App-Prefs:root=Bluetooth") else { return }
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+        blueToothAlert.addAction(enableBluetoothAction)
+        self.present(blueToothAlert, animated: true, completion: nil)
+    }
+    
     func presentScanQRCode() {
         let alert = UIAlertController(title: "Re-Scan QR Code".localized, message: "We don't have Hider's QR Code info.".localized, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Okay".localized, style: .default) { (_) in
             self.dismiss(animated: true, completion: nil)
         }
         alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func presentNeedLocationPermission() {
+        let alert = UIAlertController(title: "Need Location Permission", message: "You can give us permission in settings.", preferredStyle: .alert)
+        let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) in
+            if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
+                UIApplication.shared.open(appSettings)
+            }
+        }
+        alert.addAction(settingsAction)
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -269,13 +294,26 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
 
     // MARK: Timer methods
     
+    func reloadSeconds() {
+        switch self.timeSetting {
+        case .twentySeconds:
+            self.elapsedTimeInSecond = 20
+        case .fortySeconds:
+            self.elapsedTimeInSecond = 40
+        case .sixtySeconds:
+            self.elapsedTimeInSecond = 60
+        }
+        
+        self.startTime = elapsedTimeInSecond
+    }
+    
     func pauseTimer() {
         timer?.invalidate()
     }
     
     func resetTimer() {
         timer?.invalidate()
-        elapsedTimeInSecond = 20
+        reloadSeconds()
     }
     
     func updateTimeLabel() {
@@ -284,7 +322,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         self.seekButton.setTitle(String(format: "%2d", seconds), for: .normal)
     }
 
-    
     
     func updateButtonTitle() {
         if isSearching {
@@ -327,7 +364,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         })
 
     }
-    
    
     // MARK: Actions
     @IBAction func startButtonPressed(sender:Any){
@@ -349,7 +385,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             resetGame()
             statusLabel.text = ""
         }
-        
     }
     
     // MARK: Helpers
@@ -366,18 +401,32 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         }
     }
     
-    func metersToFeet(distanceInMeters: Double) -> Double {
-        return distanceInMeters * 3.28084
+    func determineIfSeekerWon(distance: CLLocationAccuracy) {
+        if distanceSetting == .feet {
+            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance))
+            if accuracyInFeet < "3.00" {
+                presentUserWon()
+            }
+        } else {
+            let accuracyInMeters = String(format: "%.2f", distance)
+            if accuracyInMeters < "1.00" {
+                presentUserWon()
+            }
+        }
     }
     
-    func presentBlueToothNotEnabled() {
-        let blueToothAlert = UIAlertController(title: "Bluetooth is Disabled".localized, message: "We need to enable Bluetooth to connect the Hider and Seeker".localized, preferredStyle: .alert)
-        let enableBluetoothAction = UIAlertAction(title: "Enable".localized, style: .default) { (_) in
-            guard let url = URL(string: "App-Prefs:root=Bluetooth") else { return }
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    func displayDistance(for beacon: CLBeacon) {
+        if distanceSetting == .feet {
+            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: beacon.accuracy))
+            statusLabel.text = "Hider is \(accuracyInFeet)ft away".localized
+        } else {
+            let accuracyInMeters = String(format: "%.2f",beacon.accuracy)
+            statusLabel.text = "Hider is \(accuracyInMeters)m away".localized
         }
-        blueToothAlert.addAction(enableBluetoothAction)
-        self.present(blueToothAlert, animated: true, completion: nil)
+    }
+    
+    func metersToFeet(distanceInMeters: Double) -> Double {
+        return distanceInMeters * 3.28084
     }
     
     func vibrate() {
@@ -476,6 +525,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     func startAdvertising() {
         beaconRegion = self.createBeaconRegion()
+        guard beaconRegion != nil else { return }
         guard let dataDictionary = beaconRegion.peripheralData(withMeasuredPower: nil) as? [String: Any] else {
             showAlert(title: "Error Connecting".localized, message: "We are having trouble signaling the device. Please try again.".localized)
             isBroadcasting = false
