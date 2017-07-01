@@ -234,7 +234,10 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func presentCantFindBeacon() {
         statusLabel.text = ""
         resetGame()
-        let alert = UIAlertController(title: "Can't find Hider's Beacon".localized, message: "Ensure they tap \"Hide\" and are within 100 feet".localized, preferredStyle: .alert)
+        var distance: String = "100 feet"
+        if distanceSetting == .meters { distance = "30 meters" }
+        
+        let alert = UIAlertController(title: "Can't find Hider's Beacon".localized, message: "Ensure they tap \"Hide\" and are within \(distance)".localized, preferredStyle: .alert)
         let gotItAction = UIAlertAction(title: "Got it".localized, style: .default, handler: nil)
         alert.addAction(gotItAction)
         self.present(alert, animated: true, completion: nil)
@@ -347,7 +350,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             self.statusLabel.text = readyOrNot[untilGameStarts]
             
             if untilGameStarts == 0 {
-                self.instructionsLabel.text = "Get within 1 foot of Hider".localized
+                var distance = "3 feet"
+                if self.distanceSetting == .meters { distance = "1 meter" }
+                self.instructionsLabel.text = "Get within \(distance) of Hider".localized
                 self.pauseTimer()
                 self.backButton.setTitle("Stop".localized, for: .normal)
                 self.backButton.isHidden = false

@@ -25,6 +25,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     var isSearching: Bool = false
     var isBroadcasting = false
     var dataDictionary = [String: Any]()
+    var distanceSetting: DistanceSetting = .feet
     
     @IBOutlet weak var hideButton:UIButton!
     @IBOutlet weak var statusLabel: UILabel!
@@ -33,6 +34,10 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        self.distanceSetting = SettingsController.sharedController.getDistanceSetting()
+        setupOpeningLabel()
         
         locationManager = CLLocationManager()
         locationManager.requestAlwaysAuthorization()
@@ -51,6 +56,19 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         loadingAnimation()
     }
     
+    func setupOpeningLabel() {
+        var measurement = ""
+        
+        switch distanceSetting {
+        case .feet:
+            measurement = "100 feet"
+        case .meters:
+            measurement = "30 meters"
+        }
+        
+        self.hideThenTapLabel.text = "Hide within \(measurement), then tap...".localized
+    }
+    
     func loadingAnimation() {
         disableHideButton()
         hideButton.alpha = 0.0
@@ -65,7 +83,6 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
                 self.hideButton.alpha = 1.0
             })
             
-
         //self.resetGame()
         }
     }
@@ -211,6 +228,32 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
     }
     
+    func displayDistanceFromSeeker(distance: CLLocationAccuracy) {
+        var accuracy = ""
+        if distanceSetting == .feet {
+            accuracy = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance))
+            statusLabel.text = "Seeker is \(accuracy)ft away".localized
+        } else {
+            accuracy = String(format: "%.2f", distance)
+            statusLabel.text = "Seeker is \(accuracy)m away".localized
+        }
+    }
+    
+    func determineIfHiderLost(distance: CLLocationAccuracy) {
+        if distanceSetting == .feet {
+            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance))
+            if accuracyInFeet < "3.00" {
+                presentUserLost()
+            }
+        } else {
+            let accuracyInMeters = String(format: "%.2f", distance)
+            if accuracyInMeters < "1.00" {
+                presentUserLost()
+            }
+        }
+    }
+
+    
     func metersToFeet(distanceInMeters: Double) -> Double {
         return distanceInMeters * 3.28084
     }
@@ -224,10 +267,8 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         hideButton.setTitleColor(UIColor.myBlue, for: .normal)
         hideButton.isEnabled = true
         hideButton.isHidden = false
-        
     }
 
-    
     func delayWithSeconds(_ seconds: Double, completion: @escaping () -> ()) {
         DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
             completion()
@@ -297,15 +338,8 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         statusLabel.isHidden = false
         guard let beacon = beacons.first else { return }
         
-        let accuracy = String(format: "%.2f", self.metersToFeet(distanceInMeters: beacon.accuracy))
-       
-        if accuracy < "1.00" {
-            self.presentUserLost()
-            return
-        } else {
-            statusLabel.text = "Seeker is \(accuracy)ft away".localized
-        }
-        
+        displayDistanceFromSeeker(distance: beacon.accuracy)
+        determineIfHiderLost(distance: beacon.accuracy)
         isSearching = false
         toggleDiscovery()
     }

@@ -159,7 +159,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hide within 100 feet, then tap..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T43-a8-cec" customClass="LocalizedLabel" customModule="Time___Seek" customModuleProvider="target">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T43-a8-cec" customClass="LocalizedLabel" customModule="Time___Seek" customModuleProvider="target">
                                 <rect key="frame" x="36" y="303.5" width="303" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="byV-8s-oUc"/>
