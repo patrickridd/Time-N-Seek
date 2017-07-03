@@ -10,6 +10,16 @@ import UIKit
 
 class SettingsEmbeddedTableViewController: UITableViewController {
     
+    @IBOutlet weak var twentyCheckMark: UIImageView!
+    
+    @IBOutlet weak var fortyCheckMark: UIImageView!
+    
+    @IBOutlet weak var sixtyCheckMark: UIImageView!
+    
+    @IBOutlet weak var feetCheckMark: UIImageView!
+    
+    @IBOutlet weak var metersCheckMark: UIImageView!
+    
     let distanceKey = "distanceKey"
     let timeKey = "timeKey"
     
@@ -26,59 +36,74 @@ class SettingsEmbeddedTableViewController: UITableViewController {
         
         
         switch timeSettings {
-        case .twentySeconds: highlightSaveTimeSection(row: 0)
-        case.fortySeconds: highlightSaveTimeSection(row: 1)
-        case .sixtySeconds: highlightSaveTimeSection(row: 2)
+        case .twentySeconds: hideCheckMarks(inSection: 0, exceptRow: 0)
+        case.fortySeconds: hideCheckMarks(inSection: 0, exceptRow: 1)
+        case .sixtySeconds: hideCheckMarks(inSection: 0, exceptRow: 2)
         }
         
         switch distanceSettings {
-        case .feet: highlightSaveDistanceSection(row: 0)
-        case .meters: highlightSaveDistanceSection(row: 1)
+        case .feet: hideCheckMarks(inSection: 1, exceptRow: 0)
+        case .meters: hideCheckMarks(inSection: 1, exceptRow: 1)
         }
     }
     
-    func highlightSaveTimeSection(row: Int) {
-        let indexPath = IndexPath(row: row, section: 0)
-        
-        let cell = tableView.cellForRow(at: indexPath)
-        let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor.myBlue
-        cell?.selectedBackgroundView = backgroundView
-        cell?.isSelected = true
-        
-        switch row {
-        case 0: SettingsController.sharedController.setTimeSetting(timeSetting: .twentySeconds)
-        case 1: SettingsController.sharedController.setTimeSetting(timeSetting: .fortySeconds)
-        case 2: SettingsController.sharedController.setTimeSetting(timeSetting: .sixtySeconds)
-        default: break
+    func saveSetting(inSection section: Int, forRow row: Int) {
+        if section == 0 {
+            switch row {
+            case 0: SettingsController.sharedController.setTimeSetting(timeSetting: .twentySeconds)
+            case 1: SettingsController.sharedController.setTimeSetting(timeSetting: .fortySeconds)
+            case 2: SettingsController.sharedController.setTimeSetting(timeSetting: .sixtySeconds)
+            default: break
+            }
+            
+        } else {
+            switch row {
+            case 0: SettingsController.sharedController.setDistanceSetting(distanceSetting: .feet)
+            case 1: SettingsController.sharedController.setDistanceSetting(distanceSetting: .meters)
+            default: break
+            }
         }
-        
     }
+        
     
-    func highlightSaveDistanceSection(row: Int) {
-        let indexPath = IndexPath(row: row, section: 1)
-        let cell = tableView.cellForRow(at: indexPath)
-        let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor.myBlue
-        cell?.selectedBackgroundView = backgroundView
-        cell?.isSelected = true
-
-        switch row {
-        case 0: SettingsController.sharedController.setDistanceSetting(distanceSetting: .feet)
-        case 1: SettingsController.sharedController.setDistanceSetting(distanceSetting: .meters)
-        default: break
-        }
+    func hideCheckMarks(inSection section: Int, exceptRow row: Int) {
+        
+        if section == 0 {
+            // Hide all checkmarks in section 0 except for the specific row case
+            switch row {
+            case 0:
+                self.twentyCheckMark.isHidden = false // reveals the case row
+                self.fortyCheckMark.isHidden = true
+                self.sixtyCheckMark.isHidden = true
+            case 1:
+                self.fortyCheckMark.isHidden = false // reveals the case row
+                self.twentyCheckMark.isHidden = true
+                self.sixtyCheckMark.isHidden = true
+            default:
+                self.sixtyCheckMark.isHidden = false // reveals the case row
+                self.twentyCheckMark.isHidden = true
+                self.fortyCheckMark.isHidden = true
+                
+                
+            }
+        } else if section == 1 {
+            // Hide all checkmarks in section 1 except for the specific row case
+                switch row {
+                case 0:
+                    self.feetCheckMark.isHidden = false  // reveals the case row
+                    self.metersCheckMark.isHidden = true
+                default:
+                    self.metersCheckMark.isHidden = false  // reveals the case row
+                    self.feetCheckMark.isHidden = true
+                }
+            }
     }
-
     
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 {
-            highlightSaveTimeSection(row: indexPath.row)
-        } else {
-            highlightSaveDistanceSection(row: indexPath.row)
-        }
+            saveSetting(inSection: indexPath.section, forRow: indexPath.row)
+            setupSettings()
     }
     
 }
