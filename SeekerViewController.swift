@@ -54,7 +54,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
     
     func loadingAnimation() {
-        disableSeekButton()
         seekButton.alpha = 0.0
         letHiderHideLabel.alpha = 0.0
         UIView.animate(withDuration: 2.0) {
@@ -63,9 +62,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         delayWithSeconds(2) {
             self.letHiderHideLabel.isHidden = true
             UIView.animate(withDuration: 1.5, animations: {
-               self.seekButton.alpha = 1.0
+                self.seekButton.alpha = 1.0
+                self.setSeekButtonToNormal()
             })
-            self.resetGame()
         }
     }
     
@@ -196,7 +195,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         isSearching = true
         resetTimer()
         instructionsLabel.isHidden = true
-        enableSeekButton()
         backButton.setTitle("Back".localized, for: .normal)
         toggleDiscovery()
         delayWithSeconds(2) {
@@ -336,7 +334,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
     
     func startGame() {
-        seekButton.isEnabled = false
+        disableSeekButton()
         instructionsLabel.text = ""
         self.instructionsLabel.text = ""
         var untilGameStarts = 4

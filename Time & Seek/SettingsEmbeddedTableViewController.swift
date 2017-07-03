@@ -72,15 +72,15 @@ class SettingsEmbeddedTableViewController: UITableViewController {
             // Hide all checkmarks in section 0 except for the specific row case
             switch row {
             case 0:
-                self.twentyCheckMark.isHidden = false // reveals the case row
+                self.twentyCheckMark.isHidden = false // reveals the case row checkmark
                 self.fortyCheckMark.isHidden = true
                 self.sixtyCheckMark.isHidden = true
             case 1:
-                self.fortyCheckMark.isHidden = false // reveals the case row
+                self.fortyCheckMark.isHidden = false // reveals the case row checkmark
                 self.twentyCheckMark.isHidden = true
                 self.sixtyCheckMark.isHidden = true
             default:
-                self.sixtyCheckMark.isHidden = false // reveals the case row
+                self.sixtyCheckMark.isHidden = false // reveals the case row checkmark
                 self.twentyCheckMark.isHidden = true
                 self.fortyCheckMark.isHidden = true
                 
@@ -90,10 +90,10 @@ class SettingsEmbeddedTableViewController: UITableViewController {
             // Hide all checkmarks in section 1 except for the specific row case
                 switch row {
                 case 0:
-                    self.feetCheckMark.isHidden = false  // reveals the case row
+                    self.feetCheckMark.isHidden = false  // reveals the case row checkmark
                     self.metersCheckMark.isHidden = true
                 default:
-                    self.metersCheckMark.isHidden = false  // reveals the case row
+                    self.metersCheckMark.isHidden = false  // reveals the case row checkmark
                     self.feetCheckMark.isHidden = true
                 }
             }

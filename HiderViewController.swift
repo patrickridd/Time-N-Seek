@@ -70,13 +70,11 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     }
     
     func loadingAnimation() {
-        disableHideButton()
         hideButton.alpha = 0.0
         hideThenTapLabel.alpha = 0.0
         UIView.animate(withDuration: 2.0) {
             self.hideThenTapLabel.alpha = 1.0
         }
-        self.enableHideButton()
         delayWithSeconds(2) {
             self.hideThenTapLabel.isHidden = true
             UIView.animate(withDuration: 1.5, animations: {
