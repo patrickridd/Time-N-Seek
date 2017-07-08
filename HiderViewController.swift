@@ -13,7 +13,7 @@ import AudioToolbox
 
 class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLocationManagerDelegate {
 
-    var beaconRegion: CLBeaconRegion!
+    var seekerBeacon: CLBeaconRegion!
     var hiderBeacon: CLBeaconRegion!
     var locationManager: CLLocationManager!
     var peripheralManager: CBPeripheralManager!
@@ -85,8 +85,6 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         }
     }
 
-    
-    
     // MARK: Main
     
     func checkBroadcastState() {
@@ -129,7 +127,6 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
             isBroadcasting = false
             return
         }
-        
         peripheralManager.startAdvertising(dataDictionary)
         isBroadcasting = true
     }
@@ -301,9 +298,9 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
                 }
             })
         } else {
-            if beaconRegion != nil {
-                locationManager.stopMonitoring(for: beaconRegion)
-                locationManager.stopRangingBeacons(in: beaconRegion)
+            if seekerBeacon != nil {
+                locationManager.stopMonitoring(for: seekerBeacon)
+                locationManager.stopRangingBeacons(in: seekerBeacon)
                 locationManager.stopUpdatingLocation()
                 isSearching = false
             }
@@ -320,11 +317,11 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
                 callback(false)
                 return
             }
-            beaconRegion = CLBeaconRegion(proximityUUID: uuid, identifier: "com.PatrickRidd.Timed-N-Seek-Seeker")
-            beaconRegion.notifyOnEntry = true
-            beaconRegion.notifyOnExit = true
+            seekerBeacon = CLBeaconRegion(proximityUUID: uuid, identifier: "com.PatrickRidd.Timed-N-Seek-Seeker")
+            seekerBeacon.notifyOnEntry = true
+            seekerBeacon.notifyOnExit = true
             
-            locationManager.startMonitoring(for: beaconRegion)
+            locationManager.startMonitoring(for: seekerBeacon)
             locationManager.startUpdatingLocation()
             callback(true)
         } else {
@@ -339,7 +336,9 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         displayDistanceFromSeeker(distance: beacon.accuracy)
         determineIfHiderLost(distance: beacon.accuracy)
         isSearching = false
-        toggleDiscovery()
+        delayWithSeconds(0.5) {
+            self.toggleDiscovery()
+        }
     }
 
     // MARK: CLLocationManagerDelegate functions
@@ -368,9 +367,9 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         switch state {
         case .inside:
-            locationManager.startRangingBeacons(in: beaconRegion)
+            locationManager.startRangingBeacons(in: seekerBeacon)
         case .outside:
-            locationManager.stopRangingBeacons(in: beaconRegion)
+            locationManager.stopRangingBeacons(in: seekerBeacon)
         case .unknown:
             break
         }

@@ -20,7 +20,8 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     @IBOutlet weak var letHiderHideLabel: UILabel!
     
     var uuid: String?
-    var beaconRegion: CLBeaconRegion!
+    var hiderBeacon: CLBeaconRegion!
+    var seekerBeacon: CLBeaconRegion!
     var locationManager: CLLocationManager!
     var peripheralManager: CBPeripheralManager!
     var isBroadcasting: Bool = false
@@ -94,9 +95,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         switch state {
         case .inside:
-            locationManager.startRangingBeacons(in: beaconRegion)
+            locationManager.startRangingBeacons(in: hiderBeacon)
         case .outside:
-            locationManager.stopRangingBeacons(in: beaconRegion)
+            locationManager.stopRangingBeacons(in: hiderBeacon)
         case .unknown:
             break
         }
@@ -104,15 +105,10 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         if beacons.count > 0 {
-            if elapsedTimeInSecond == self.startTime {
-                vibrate()
-                startTimer()
-            }
             self.updateSatusLabels(beacons: beacons)
             locationManager.stopRangingBeacons(in: region)
-            self.updateButtonTitle()
         } else {
-            self.presentCantFindBeacon()
+           // self.presentCantFindBeacon()
         }
     }
     
@@ -121,11 +117,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        self.presentCantFindBeacon()
+        //self.presentCantFindBeacon()
     }
     
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
-        self.presentCantFindBeacon()
+       // self.presentCantFindBeacon()
         print("Monitring did fail: \(error)")
     }
     
@@ -147,11 +143,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
                 self.presentScanQRCode()
                 return
             }
-            beaconRegion = CLBeaconRegion(proximityUUID: uuid, identifier: "com.PatrickRidd.Timed-N-Seek-Hider")
-            beaconRegion.notifyOnEntry = true
-            beaconRegion.notifyOnExit = true
+            hiderBeacon = CLBeaconRegion(proximityUUID: uuid, identifier: "com.PatrickRidd.Timed-N-Seek-Hider")
+            hiderBeacon.notifyOnEntry = true
+            hiderBeacon.notifyOnExit = true
             
-            locationManager.startMonitoring(for: beaconRegion)
+            locationManager.startMonitoring(for: hiderBeacon)
             locationManager.startUpdatingLocation()
             callback(true)
         } else {
@@ -170,11 +166,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
                 }
             })
         } else {
-            if beaconRegion != nil {
-                locationManager.stopMonitoring(for: beaconRegion)
-                locationManager.stopRangingBeacons(in: beaconRegion)
-                locationManager.stopUpdatingLocation()
-            }
+            stopLocatingHider()
             resetTimer()
             isSearching = false
             updateButtonTitle()
@@ -184,18 +176,25 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func updateSatusLabels(beacons: [CLBeacon]) {
         statusLabel.isHidden = false
         guard let beacon = beacons.first else { self.presentCantFindBeacon(); return }
-        
+        if elapsedTimeInSecond == self.startTime {
+            startTimer()
+        }
+
         displayDistance(for: beacon)
         determineIfSeekerWon(distance: beacon.accuracy)
-        isSearching = false
-        toggleDiscovery()
+        delayWithSeconds(0.5) {
+            self.toggleDiscovery()
+        }
+        
     }
     
     func resetGame() {
         isSearching = true
+        stopLocatingHider()
         resetTimer()
         instructionsLabel.isHidden = true
         backButton.setTitle("Back".localized, for: .normal)
+        enableSeekButton()
         toggleDiscovery()
         delayWithSeconds(2) {
             UIView.animate(withDuration: 2.0, animations: {
@@ -320,7 +319,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func updateTimeLabel() {
         let seconds = elapsedTimeInSecond % 60
         self.seekButton.titleLabel?.font = UIFont.systemFont(ofSize: 28)
-        self.seekButton.setTitle(String(format: "%2d", seconds), for: .normal)
+        self.seekButton.setTitle(String(format: "%2d", elapsedTimeInSecond), for: .normal)
     }
 
     
@@ -401,6 +400,14 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             return "Near".localized
         case .unknown:
             return "Unknown".localized
+        }
+    }
+    
+    func stopLocatingHider() {
+        if hiderBeacon != nil {
+            locationManager.stopMonitoring(for: hiderBeacon)
+            locationManager.stopRangingBeacons(in: hiderBeacon)
+            locationManager.stopUpdatingLocation()
         }
     }
     
@@ -527,9 +534,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
     
     func startAdvertising() {
-        beaconRegion = self.createBeaconRegion()
-        guard beaconRegion != nil else { return }
-        guard let dataDictionary = beaconRegion.peripheralData(withMeasuredPower: nil) as? [String: Any] else {
+        seekerBeacon = self.createBeaconRegion()
+        guard seekerBeacon != nil else { return }
+        guard let dataDictionary = seekerBeacon.peripheralData(withMeasuredPower: nil) as? [String: Any] else {
             showAlert(title: "Error Connecting".localized, message: "We are having trouble signaling the device. Please try again.".localized)
             isBroadcasting = false
             return
