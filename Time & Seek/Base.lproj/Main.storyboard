@@ -215,7 +215,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pCh-6w-mJL" customClass="LocalizedButton" customModule="Time___Seek" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pCh-6w-mJL" customClass="LocalizedButton" customModule="Time___Seek" customModuleProvider="target">
                                 <rect key="frame" x="87.5" y="233.5" width="200" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="EPt-NP-qlN"/>
@@ -480,7 +480,6 @@
         <!--SettingsTableViewController-->
         <scene sceneID="Mb9-61-GWt">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2LW-g9-VKN" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="XFE-d7-dZU" userLabel="SettingsTableViewController" customClass="SettingsEmbeddedTableViewController" customModule="Time___Seek" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="L6A-or-6Si">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="335"/>
@@ -654,6 +653,7 @@
                         <outlet property="twentyCheckMark" destination="n4X-oU-607" id="p2q-dS-n7F"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2LW-g9-VKN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1389.5999999999999" y="704.79760119940033"/>
         </scene>

@@ -27,6 +27,8 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     var isBroadcasting: Bool = false
     let seekerMinor = "456"
     let seekerMajor = "456"
+    let readyOrNot = ["Here I come".localized,"Not".localized,"Or".localized,"Ready".localized]
+
     
     private var timer: Timer?
     private var timeSetting: TimeSetting = .twentySeconds
@@ -333,18 +335,19 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
     
     func startGame() {
-        disableSeekButton()
-        instructionsLabel.text = ""
+        self.disableSeekButton()
         self.instructionsLabel.text = ""
-        var untilGameStarts = 4
+        self.instructionsLabel.text = ""
+        var untilGameStarts = 3
         self.statusLabel.isHidden = false
         self.statusLabel.alpha = 1.0
         self.backButton.isHidden = true
-        var readyOrNot = ["Here I come".localized,"Not".localized,"Or".localized,"Ready".localized]
-        self.timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true, block: { (timer) in
+        self.statusLabel.text = self.readyOrNot[untilGameStarts]
+        
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1.3, repeats: true, block: { (timer) in
             untilGameStarts -= 1
             self.seekButton.setTitle("\(untilGameStarts)", for: .normal)
-            self.statusLabel.text = readyOrNot[untilGameStarts]
+            self.statusLabel.text = self.readyOrNot[untilGameStarts]
             
             if untilGameStarts == 0 {
                 var distance = "3 feet"
@@ -364,13 +367,13 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
                 })
             }
         })
-
     }
    
     // MARK: Actions
     @IBAction func startButtonPressed(sender:Any){
         resetTimer()
         if !isSearching {
+            
             startGame()
         } else {
             self.toggleDiscovery()
