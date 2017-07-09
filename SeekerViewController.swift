@@ -27,8 +27,8 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     var isBroadcasting: Bool = false
     let seekerMinor = "456"
     let seekerMajor = "456"
-    let readyOrNot = ["Here I come".localized,"Not".localized,"Or".localized,"Ready".localized]
-
+    let readyOrNot = ["Here I come!!".localized,"Not".localized,"Or".localized,"Ready".localized]
+    
     
     private var timer: Timer?
     private var timeSetting: TimeSetting = .twentySeconds
@@ -37,6 +37,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     private var startTime: Int = 20
     
     var isSearching = false
+    var seekerLost = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -169,7 +170,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             })
         } else {
             stopLocatingHider()
-            resetTimer()
             isSearching = false
             updateButtonTitle()
         }
@@ -183,21 +183,24 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         }
 
         displayDistance(for: beacon)
-        determineIfSeekerWon(distance: beacon.accuracy)
-        delayWithSeconds(0.5) {
-            self.toggleDiscovery()
-        }
+        let userWon = determineIfSeekerWon(distance: beacon.accuracy)
         
+        if !userWon && !seekerLost {
+            self.delayWithSeconds(0.5) {
+                self.isSearching = false
+                self.toggleDiscovery()
+            }
+        }
     }
     
     func resetGame() {
         isSearching = true
         stopLocatingHider()
-        resetTimer()
         instructionsLabel.isHidden = true
         backButton.setTitle("Back".localized, for: .normal)
         enableSeekButton()
         toggleDiscovery()
+        resetTimer()
         delayWithSeconds(2) {
             UIView.animate(withDuration: 2.0, animations: {
                 self.statusLabel.alpha = 0.0
@@ -252,6 +255,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     func presentUserLost() {
         vibrate()
+        self.seekerLost = true
         self.statusLabel.textColor = UIColor.geraldine
         self.statusLabel.text = "You Lost!!!".localized
         checkBroadcastState()
@@ -336,6 +340,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     func startGame() {
         self.disableSeekButton()
+        self.seekerLost = false
         self.instructionsLabel.text = ""
         self.instructionsLabel.text = ""
         var untilGameStarts = 3
@@ -414,18 +419,21 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         }
     }
     
-    func determineIfSeekerWon(distance: CLLocationAccuracy) {
+    func determineIfSeekerWon(distance: CLLocationAccuracy) -> Bool {
         if distanceSetting == .feet {
             let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance))
             if accuracyInFeet < "3.00" {
                 presentUserWon()
+                return true
             }
         } else {
             let accuracyInMeters = String(format: "%.2f", distance)
             if accuracyInMeters < "1.00" {
                 presentUserWon()
+                return true
             }
         }
+        return false
     }
     
     func displayDistance(for beacon: CLBeacon) {

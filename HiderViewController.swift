@@ -234,18 +234,21 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         }
     }
     
-    func determineIfHiderLost(distance: CLLocationAccuracy) {
+    func determineIfHiderLost(distance: CLLocationAccuracy) -> Bool {
         if distanceSetting == .feet {
             let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance))
             if accuracyInFeet < "3.00" {
                 presentUserLost()
+                return true
             }
         } else {
             let accuracyInMeters = String(format: "%.2f", distance)
             if accuracyInMeters < "1.00" {
                 presentUserLost()
+                return true
             }
         }
+        return false
     }
 
     
@@ -334,10 +337,13 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         guard let beacon = beacons.first else { return }
         
         displayDistanceFromSeeker(distance: beacon.accuracy)
-        determineIfHiderLost(distance: beacon.accuracy)
-        isSearching = false
-        delayWithSeconds(0.5) {
-            self.toggleDiscovery()
+        let hiderLost = determineIfHiderLost(distance: beacon.accuracy)
+        
+        if !hiderLost {
+            delayWithSeconds(0.5, completion: { 
+                self.isSearching = false
+                self.toggleDiscovery()
+            })
         }
     }
 
