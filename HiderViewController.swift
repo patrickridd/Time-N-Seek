@@ -19,8 +19,12 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     var peripheralManager: CBPeripheralManager!
     
     var uuid: String?
-    let minor = "123"
-    let major = "123"
+    let majorMinor = "123"
+    let hiderLostMajorMinor = "666"
+    let hiderWonMajorMinor = "777"
+    
+    var hiderWon = false
+    var hiderLost = false
     
     var isSearching: Bool = false
     var isBroadcasting = false
@@ -92,7 +96,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
             // Attempt to broadcast
             switch peripheralManager.state {
             case .poweredOn:
-                self.startAdvertising()
+                self.determineBeaconToCreate()
                 self.updateButtonAndBeaconStatus()
             case .poweredOff:
                 break
@@ -108,27 +112,65 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         } else {
             // Stop broadcasting
             peripheralManager.stopAdvertising()
+            hiderLost = false
+            hiderWon = false
             isBroadcasting = false
             self.updateButtonAndBeaconStatus()
         }
     }
     
     func createBeaconRegion() -> CLBeaconRegion? {
-        guard let uuidString = self.uuid, let uuid = UUID(uuidString: uuidString), let major = Int(self.major), let minor = Int(self.minor)
+        guard let uuidString = self.uuid, let uuid = UUID(uuidString: uuidString), let major = Int(self.majorMinor), let minor = Int(self.majorMinor)
             else { return nil }
         return CLBeaconRegion(proximityUUID: uuid, major: CLBeaconMajorValue(major), minor: CLBeaconMinorValue(minor), identifier: "com.PatrickRidd.Timed-N-Seek-Hider")
         
     }
     
-    func startAdvertising() {
-        hiderBeacon = self.createBeaconRegion()
-        guard let dataDictionary = hiderBeacon.peripheralData(withMeasuredPower: nil) as? [String: Any] else {
+    func createHiderWonBeacon() -> CLBeaconRegion? {
+        guard let uuidString = self.uuid, let uuid = UUID(uuidString: uuidString), let major = Int(self.hiderWonMajorMinor), let minor = Int(self.hiderWonMajorMinor)
+            else { return nil }
+        return CLBeaconRegion(proximityUUID: uuid, major: CLBeaconMajorValue(major), minor: CLBeaconMinorValue(minor), identifier: "com.PatrickRidd.Timed-N-Seek-Hider")
+        
+    }
+    
+    func createHiderLostBeacon() -> CLBeaconRegion? {
+        guard let uuidString = self.uuid, let uuid = UUID(uuidString: uuidString), let major = Int(self.hiderLostMajorMinor), let minor = Int(self.hiderLostMajorMinor)
+            else { return nil }
+        return CLBeaconRegion(proximityUUID: uuid, major: CLBeaconMajorValue(major), minor: CLBeaconMinorValue(minor), identifier: "com.PatrickRidd.Timed-N-Seek-Hider")
+        
+    }
+
+
+    func determineBeaconToCreate() {
+        if hiderLost {
+            // create hiderLost beacon
+            hiderBeacon = self.createHiderLostBeacon()
+        } else if hiderWon {
+            // create hiderWonBeacon
+            hiderBeacon = self.createHiderWonBeacon()
+        } else {
+            // Hider is Hiding
+            hiderBeacon = self.createBeaconRegion()
+        }
+        
+        advertiseHiderBeacon()
+    }
+    
+    func advertiseHiderBeacon() {
+        guard hiderBeacon != nil else { return }
+        guard let dataDictionary = seekerBeacon.peripheralData(withMeasuredPower: nil) as? [String: Any] else {
             showAlert(title: "Error Connecting".localized, message: "We are having trouble signaling the device. Please try again.".localized)
             isBroadcasting = false
             return
         }
         peripheralManager.startAdvertising(dataDictionary)
         isBroadcasting = true
+        
+        if hiderLost || hiderWon {
+            delayWithSeconds(3, completion: {
+                self.checkBroadcastState()
+            })
+        }
     }
     
     func updateButtonAndBeaconStatus() {
@@ -210,9 +252,11 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     
     func presentUserLost() {
         vibrate()
+        self.hiderLost = true
         self.statusLabel.textColor = UIColor.geraldine
         self.statusLabel.text = "The Seeker found you. You lost!".localized
         resetGame()
+        isBroadcasting = false
         checkBroadcastState()
     }
     
@@ -234,15 +278,21 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         }
     }
     
-    func determineIfHiderLost(distance: CLLocationAccuracy) -> Bool {
+    func determineIfHiderLost(seekerBeacon: CLBeacon) -> Bool {
+        if seekerBeacon.major == 777 {
+            presentUserLost()
+            return true
+        }
+        
         if distanceSetting == .feet {
-            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance))
+            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: seekerBeacon.accuracy))
             if accuracyInFeet < "3.00" {
                 presentUserLost()
                 return true
             }
+            
         } else {
-            let accuracyInMeters = String(format: "%.2f", distance)
+            let accuracyInMeters = String(format: "%.2f", seekerBeacon.accuracy)
             if accuracyInMeters < "1.00" {
                 presentUserLost()
                 return true
@@ -250,7 +300,6 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         }
         return false
     }
-
     
     func metersToFeet(distanceInMeters: Double) -> Double {
         return distanceInMeters * 3.28084
@@ -337,7 +386,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         guard let beacon = beacons.first else { return }
         
         displayDistanceFromSeeker(distance: beacon.accuracy)
-        let hiderLost = determineIfHiderLost(distance: beacon.accuracy)
+        hiderLost = determineIfHiderLost(seekerBeacon: beacon)
         
         if !hiderLost {
             delayWithSeconds(0.5, completion: { 

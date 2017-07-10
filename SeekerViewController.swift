@@ -612,7 +612,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         isBroadcasting = true
         
         if seekerLost || seekerWon {
-            delayWithSeconds(8, completion: { 
+            delayWithSeconds(3, completion: {
                  self.checkBroadcastState()
             })
         }
