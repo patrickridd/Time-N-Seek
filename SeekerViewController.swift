@@ -594,6 +594,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
 
     
     func determineBeaconToCreate() {
+        peripheralManager.stopAdvertising()
         if seekerLost {
             // create seekerLost beacon
             seekerBeacon = self.createSeekerLostBeacon()
@@ -618,9 +619,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         peripheralManager.startAdvertising(dataDictionary)
         print("\(seekerBeacon.major ?? 0)")
         if seekerLost || seekerWon {
-            delayWithSeconds(8, completion: {
+            delayWithSeconds(1, completion: {
                 self.isBroadcasting = true
                  self.checkBroadcastState()
+                self.peripheralManager.stopAdvertising()
+
             })
         }
     }
