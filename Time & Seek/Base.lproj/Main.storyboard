@@ -145,9 +145,6 @@
                                 <state key="normal" title="Back">
                                     <color key="titleColor" red="1" green="0.0080841801840000008" blue="0.053826916189999997" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
-                                <connections>
-                                    <action selector="closeWindow" destination="0nL-yC-IAp" eventType="touchUpInside" id="h9l-Ug-l3F"/>
-                                </connections>
                             </button>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PQF-76-NYR" userLabel="statusLabel" customClass="LocalizedLabel" customModule="Time___Seek" customModuleProvider="target">
                                 <rect key="frame" x="62.5" y="193.5" width="250" height="0.0"/>

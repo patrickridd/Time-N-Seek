@@ -158,17 +158,17 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     
     func advertiseHiderBeacon() {
         guard hiderBeacon != nil else { return }
-        guard let dataDictionary = seekerBeacon.peripheralData(withMeasuredPower: nil) as? [String: Any] else {
+        guard let dataDictionary = hiderBeacon.peripheralData(withMeasuredPower: nil) as? [String: Any] else {
             showAlert(title: "Error Connecting".localized, message: "We are having trouble signaling the device. Please try again.".localized)
             isBroadcasting = false
             return
         }
         peripheralManager.startAdvertising(dataDictionary)
-        isBroadcasting = true
         
         if hiderLost || hiderWon {
-            delayWithSeconds(3, completion: {
-                self.checkBroadcastState()
+            delayWithSeconds(8, completion: {
+                self.stopSearchingForBeacon()
+                self.stopBroadCasting()
             })
         }
     }
@@ -212,20 +212,22 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     // MARK: Actions
     
     @IBAction func startButtonPressed(sender:Any){
-        guard let _ = self.uuid else {
-            showAlert(title: "Incomplete Information".localized, message: "Please complete the Beacon uuid text fields".localized)
-            return
-        }
+        disableHideButton()
+        setStopButton()
         resetStatusLabel()
         checkBroadcastState()
-        if !isSearching {
-            self.toggleDiscovery()
-        }
-        
         isSearching = false
+        self.toggleDiscovery()
     }
     
-    @IBAction func closeWindow() {
+    func stopGameButtonPressed() {
+        stopBroadCasting()
+        stopSearchingForBeacon()
+        setBackButton()
+        enableHideButton()
+    }
+    
+    func closeWindow() {
         if let presenter = self.presentingViewController{
             presenter.dismiss(animated: true, completion: nil)
         }
@@ -280,6 +282,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     
     func determineIfHiderLost(seekerBeacon: CLBeacon) -> Bool {
         if seekerBeacon.major == 777 {
+            print("777 Seeker Won, Hider Lost")
             presentUserLost()
             return true
         }
@@ -315,7 +318,27 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         hideButton.isEnabled = true
         hideButton.isHidden = false
     }
+    
+    func stopBroadCasting() {
+        isBroadcasting = true
+        checkBroadcastState()
+    }
 
+    func stopSearchingForBeacon() {
+        isSearching = true
+        self.toggleDiscovery()
+    }
+    
+    func setBackButton() {
+        self.backButton.setTitle("Back".localized, for: .normal)
+        self.backButton.addTarget(self, action: #selector(closeWindow), for: .touchUpInside)
+    }
+    
+    func setStopButton() {
+        self.backButton.setTitle("Stop".localized, for: .normal)
+        self.backButton.addTarget(self, action: #selector(stopGameButtonPressed), for: .touchUpInside)
+    }
+    
     func delayWithSeconds(_ seconds: Double, completion: @escaping () -> ()) {
         DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
             completion()
@@ -327,8 +350,9 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     }
     
     func resetGame() {
-        isSearching = true
-        toggleDiscovery()
+        stopSearchingForBeacon()
+        setBackButton()
+        enableHideButton()
         delayWithSeconds(2) {
             UIView.animate(withDuration: 2.0, animations: {
                 self.statusLabel.alpha = 0.0

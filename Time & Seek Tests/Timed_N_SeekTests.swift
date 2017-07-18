@@ -7,7 +7,6 @@
 //
 
 import XCTest
-@testable import Time_And_SeekTests
 
 class Timed_N_SeekTests: XCTestCase {
     

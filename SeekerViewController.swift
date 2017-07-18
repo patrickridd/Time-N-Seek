@@ -45,6 +45,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     var isSearching = false
     var seekerLost = false
     var seekerWon = false
+    var gameOn = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,7 +116,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         if beacons.count > 0 {
-            self.updateSatusLabels(beacons: beacons)
+            if gameOn {
+                self.updateSatusLabels(beacons: beacons)
+            }
             locationManager.stopRangingBeacons(in: region)
         } else {
            // self.presentCantFindBeacon()
@@ -198,7 +201,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
                 self.isSearching = false
                 self.toggleDiscovery()
             }
-        }
+        } 
     }
     
     func resetGame() {
@@ -207,6 +210,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         instructionsLabel.isHidden = true
         backButton.setTitle("Back".localized, for: .normal)
         enableSeekButton()
+        isSearching = true
         toggleDiscovery()
         resetTimer()
         delayWithSeconds(2) {
@@ -256,6 +260,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func presentUserWon() {
         vibrate()
         self.seekerWon = true
+        self.gameOn = false
         self.statusLabel.textColor = UIColor.green
         statusLabel.text = "You found the Hider!! You won!".localized
         isBroadcasting = false
@@ -266,6 +271,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func presentUserLost() {
         vibrate()
         self.seekerLost = true
+        self.gameOn = false
         self.statusLabel.textColor = UIColor.geraldine
         self.statusLabel.text = "You Lost!!!".localized
         isBroadcasting = false
@@ -353,6 +359,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         self.disableSeekButton()
         self.seekerLost = false
         self.seekerWon = false
+        self.gameOn = true
         self.instructionsLabel.text = ""
         self.instructionsLabel.text = ""
         var untilGameStarts = 3
@@ -609,10 +616,10 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             return
         }
         peripheralManager.startAdvertising(dataDictionary)
-        isBroadcasting = true
         
         if seekerLost || seekerWon {
-            delayWithSeconds(3, completion: {
+            delayWithSeconds(8, completion: {
+                self.isBroadcasting = true
                  self.checkBroadcastState()
             })
         }
