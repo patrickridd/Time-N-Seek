@@ -25,172 +25,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SeekerViewController.swift"
-            timestampString = "521491832.767403"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "582"
-            endingLineNumber = "582"
-            landmarkName = "createSeekerWonBeacon()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Time___Seek.SeekerViewController.createSeekerWonBeacon () -&gt; Swift.Optional&lt;__ObjC.CLBeaconRegion&gt;"
-                  moduleName = "Time &amp; Seek"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/Time%20&amp;%20Seek/SeekerViewController.swift"
-                  timestampString = "522104877.153508"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "582"
-                  endingLineNumber = "582"
-                  offsetFromSymbolStart = "36">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Time___Seek.SeekerViewController.createSeekerWonBeacon () -&gt; Swift.Optional&lt;__ObjC.CLBeaconRegion&gt;"
-                  moduleName = "Time &amp; Seek"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/Time%20&amp;%20Seek/SeekerViewController.swift"
-                  timestampString = "522104877.154688"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "582"
-                  endingLineNumber = "582"
-                  offsetFromSymbolStart = "140">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SeekerViewController.swift"
-            timestampString = "521491832.767403"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "550"
-            endingLineNumber = "550"
-            landmarkName = "checkBroadcastState()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SeekerViewController.swift"
-            timestampString = "521491832.767403"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "568"
-            endingLineNumber = "568"
-            landmarkName = "checkBroadcastState()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SeekerViewController.swift"
-            timestampString = "521491832.767403"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "602"
-            endingLineNumber = "602"
-            landmarkName = "determineBeaconToCreate()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SeekerViewController.swift"
-            timestampString = "521491832.767403"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "361"
-            endingLineNumber = "361"
-            landmarkName = "startGame()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SeekerViewController.swift"
-            timestampString = "521491832.767403"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
-            landmarkName = "toggleDiscovery()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Time___Seek.SeekerViewController.toggleDiscovery () -&gt; ()"
-                  moduleName = "Time &amp; Seek"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/Time%20&amp;%20Seek/SeekerViewController.swift"
-                  timestampString = "522104877.166952"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "174"
-                  endingLineNumber = "174"
-                  offsetFromSymbolStart = "64">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Time___Seek.SeekerViewController.(toggleDiscovery () -&gt; ()).(closure #1)"
-                  moduleName = "Time &amp; Seek"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/Time%20&amp;%20Seek/SeekerViewController.swift"
-                  timestampString = "522104877.168271"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "175"
-                  endingLineNumber = "175"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "HiderViewController.swift"
-            timestampString = "522104875.994981"
+            timestampString = "522108491.715471"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
+            startingLineNumber = "295"
+            endingLineNumber = "295"
             landmarkName = "determineIfHiderLost(seekerBeacon:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -202,43 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HiderViewController.swift"
-            timestampString = "522104875.994981"
+            timestampString = "522108491.715471"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "458"
-            endingLineNumber = "458"
-            landmarkName = "locationManager(_:didRangeBeacons:in:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HiderViewController.swift"
-            timestampString = "522104875.994981"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "456"
-            endingLineNumber = "456"
-            landmarkName = "locationManager(_:didRangeBeacons:in:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HiderViewController.swift"
-            timestampString = "522104875.994981"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "471"
-            endingLineNumber = "471"
+            startingLineNumber = "482"
+            endingLineNumber = "482"
             landmarkName = "locationManager(_:monitoringDidFailFor:withError:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -250,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HiderViewController.swift"
-            timestampString = "522104875.994981"
+            timestampString = "522108491.715471"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "475"
-            endingLineNumber = "475"
+            startingLineNumber = "486"
+            endingLineNumber = "486"
             landmarkName = "locationManager(_:rangingBeaconsDidFailFor:withError:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -266,13 +74,45 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HiderViewController.swift"
-            timestampString = "522104875.994981"
+            timestampString = "522108491.715471"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230"
-            landmarkName = "closeWindow()"
+            startingLineNumber = "401"
+            endingLineNumber = "401"
+            landmarkName = "initializeLocationManager(callback:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Time___Seek.HiderViewController.initializeLocationManager (callback : (Swift.Bool) -&gt; ()) -&gt; ()"
+                  moduleName = "Time &amp; Seek"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/Time%20&amp;%20Seek/HiderViewController.swift"
+                  timestampString = "522108491.841667"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "401"
+                  endingLineNumber = "401"
+                  offsetFromSymbolStart = "436">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Time___Seek.HiderViewController.initializeLocationManager (callback : (Swift.Bool) -&gt; ()) -&gt; ()"
+                  moduleName = "Time &amp; Seek"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/Time%20&amp;%20Seek/HiderViewController.swift"
+                  timestampString = "522108491.842861"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "401"
+                  endingLineNumber = "401"
+                  offsetFromSymbolStart = "540">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -281,13 +121,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "HiderViewController.swift"
-            timestampString = "522104983.175946"
+            filePath = "SeekerViewController.swift"
+            timestampString = "522107609.888178"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "396"
-            endingLineNumber = "396"
-            landmarkName = "initializeLocationManager(callback:)"
+            startingLineNumber = "568"
+            endingLineNumber = "568"
+            landmarkName = "checkBroadcastState()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

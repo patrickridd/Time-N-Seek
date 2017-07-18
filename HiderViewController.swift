@@ -39,7 +39,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        setBackButton()
         self.distanceSetting = SettingsController.sharedController.getDistanceSetting()
         setupOpeningLabel()
         
@@ -97,7 +97,6 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
             switch peripheralManager.state {
             case .poweredOn:
                 self.determineBeaconToCreate()
-                self.updateButtonAndBeaconStatus()
             case .poweredOff:
                 break
             case .unauthorized:
@@ -112,10 +111,10 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         } else {
             // Stop broadcasting
             peripheralManager.stopAdvertising()
+            setBeaconStatusToHide()
             hiderLost = false
             hiderWon = false
             isBroadcasting = false
-            self.updateButtonAndBeaconStatus()
         }
     }
     
@@ -173,16 +172,16 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         }
     }
     
-    func updateButtonAndBeaconStatus() {
-        if isBroadcasting {
-            self.hideButton.setTitle("Hiding".localized, for: .normal)
-            self.hideButton.layer.borderColor = UIColor.goGreen.cgColor
-            self.hideButton.setTitleColor(UIColor.goGreen, for: .normal)
-        } else {
-            self.hideButton.setTitle("Hide".localized, for: .normal)
-            self.hideButton.layer.borderColor = UIColor.myBlue.cgColor
-            self.hideButton.setTitleColor(UIColor.myBlue, for: .normal)
-        }
+    func setBeaconStatusToHiding() {
+        self.hideButton.setTitle("Hiding".localized, for: .normal)
+        self.hideButton.layer.borderColor = UIColor.goGreen.cgColor
+        self.hideButton.setTitleColor(UIColor.goGreen, for: .normal)
+    }
+    
+    func setBeaconStatusToHide() {
+        self.hideButton.setTitle("Hide".localized, for: .normal)
+        self.hideButton.layer.borderColor = UIColor.myBlue.cgColor
+        self.hideButton.setTitleColor(UIColor.myBlue, for: .normal)
     }
     
     // MARK: CBPeripheralManagerDelegate
@@ -214,17 +213,25 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     @IBAction func startButtonPressed(sender:Any){
         disableHideButton()
         setStopButton()
+        setBeaconStatusToHiding()
         resetStatusLabel()
         checkBroadcastState()
         isSearching = false
         self.toggleDiscovery()
     }
     
+    func backOrStopButtonTapped() {
+        
+        if backButton.titleLabel?.text == "Back".localized {
+            closeWindow()
+        } else {
+            stopGameButtonPressed()
+        }
+    }
+    
     func stopGameButtonPressed() {
-        stopBroadCasting()
-        stopSearchingForBeacon()
-        setBackButton()
-        enableHideButton()
+        resetGame()
+        resetStatusLabel()
     }
     
     func closeWindow() {
@@ -255,6 +262,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     func presentUserLost() {
         vibrate()
         self.hiderLost = true
+        setBeaconStatusToHide()
         self.statusLabel.textColor = UIColor.geraldine
         self.statusLabel.text = "The Seeker found you. You lost!".localized
         resetGame()
@@ -281,6 +289,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     }
     
     func determineIfHiderLost(seekerBeacon: CLBeacon) -> Bool {
+        print(seekerBeacon.major)
         if seekerBeacon.major == 777 {
             print("777 Seeker Won, Hider Lost")
             presentUserLost()
@@ -330,13 +339,12 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     }
     
     func setBackButton() {
+        self.backButton.addTarget(self, action: #selector(backOrStopButtonTapped), for: .touchUpInside)
         self.backButton.setTitle("Back".localized, for: .normal)
-        self.backButton.addTarget(self, action: #selector(closeWindow), for: .touchUpInside)
     }
     
     func setStopButton() {
         self.backButton.setTitle("Stop".localized, for: .normal)
-        self.backButton.addTarget(self, action: #selector(stopGameButtonPressed), for: .touchUpInside)
     }
     
     func delayWithSeconds(_ seconds: Double, completion: @escaping () -> ()) {
@@ -351,6 +359,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     
     func resetGame() {
         stopSearchingForBeacon()
+        stopBroadCasting()
         setBackButton()
         enableHideButton()
         delayWithSeconds(2) {

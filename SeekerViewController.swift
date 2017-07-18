@@ -616,7 +616,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             return
         }
         peripheralManager.startAdvertising(dataDictionary)
-        
+        print("\(seekerBeacon.major ?? 0)")
         if seekerLost || seekerWon {
             delayWithSeconds(8, completion: {
                 self.isBroadcasting = true
