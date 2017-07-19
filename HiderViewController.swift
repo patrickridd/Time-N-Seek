@@ -189,6 +189,18 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         blueToothAlert.addAction(enableBluetoothAction)
         self.present(blueToothAlert, animated: true, completion: nil)
     }
+    
+    func presentNeedLocationPermission() {
+        let alert = UIAlertController(title: "Need Location Permission", message: "You can give us permission in settings.", preferredStyle: .alert)
+        let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) in
+            if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
+                UIApplication.shared.open(appSettings)
+            }
+        }
+        alert.addAction(settingsAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+
 
     
     func presentUserLost() {
@@ -317,7 +329,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     func discoverBeacons() {
             self.initializeLocationManager(callback: { (success) in
                 if !success {
-                    locationManager.requestAlwaysAuthorization()
+                    self.presentNeedLocationPermission()
                 }
             })
     }

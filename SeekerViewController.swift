@@ -24,7 +24,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     var seekerBeacon: CLBeaconRegion!
     var locationManager: CLLocationManager!
     var peripheralManager: CBPeripheralManager!
-    var isBroadcasting: Bool = false
     
     
     let seekerMajorMinor = "456"
@@ -42,7 +41,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     private var elapsedTimeInSecond: Int = 20
     private var startTime: Int = 20
     
-    var isSearching = false
     var seekerLost = false
     var seekerWon = false
     var gameOn = true
@@ -65,6 +63,8 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         
     }
     
+    // MARK: UI Methods
+   
     func loadingAnimation() {
         seekButton.alpha = 0.0
         letHiderHideLabel.alpha = 0.0
@@ -75,12 +75,210 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             self.letHiderHideLabel.isHidden = true
             UIView.animate(withDuration: 1.5, animations: {
                 self.seekButton.alpha = 1.0
-                self.setSeekButtonToNormal()
+                self.setButtonToSeek()
             })
         }
     }
+
+    func setButtonToSeek() {
+        self.seekButton.setTitle("Seek".localized, for: .normal)
+        self.seekButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        self.seekButton.layer.borderColor = UIColor.myBlue.cgColor
+        self.seekButton.setTitleColor(UIColor.myBlue, for: .normal)
+    }
+
+    func setButtonToSeeking() {
+        self.seekButton.setTitle("Seeking", for: .normal)
+        self.seekButton.layer.borderColor = UIColor.green.cgColor
+        self.seekButton.setTitleColor(UIColor.green, for: .normal)
+    }
     
+    func disableSeekButton() {
+        seekButton.isEnabled = false
+    }
+    
+    func enableSeekButton() {
+        seekButton.layer.borderColor = UIColor.myBlue.cgColor
+        seekButton.setTitleColor(UIColor.myBlue, for: .normal)
+        seekButton.isEnabled = true
+        seekButton.isHidden = false
+        
+    }
+    
+    /**
+     Fade in a view with a duration
+     
+     - parameter duration: custom animation duration
+     */
+    func fadeIn(withDuration duration: TimeInterval = 1.0, view: UIView) {
+        UIView.animate(withDuration: duration, animations: {
+            view.alpha = 1.0
+        })
+    }
+    
+    /**
+     Fade out a view with a duration
+     
+     - parameter duration: custom animation duration
+     */
+    func fadeOut(withDuration duration: TimeInterval = 1.0, view: UIView) {
+        UIView.animate(withDuration: duration, animations: {
+            view.alpha = 0.0
+        })
+    }
+
+    // MARK: GamePlay Methods
+    
+    func updateSatusLabels(beacons: [CLBeacon]) {
+        statusLabel.isHidden = false
+        guard let beacon = beacons.first else { self.presentCantFindBeacon(); return }
+        if elapsedTimeInSecond == self.startTime {
+            startTimer()
+        }
+        
+        displayDistance(for: beacon)
+        seekerWon = determineIfSeekerWon(hiderBeacon: beacon)
+        seekerLost = determineIfSeekerLost(hiderBeacon: beacon)
+        
+        if !seekerWon && !seekerLost {
+            self.delayWithSeconds(0.5) {
+                self.stopSearchingBeacons()
+            }
+        }
+    }
+    
+    func resetGame() {
+        stopSearchingBeacons()
+        instructionsLabel.isHidden = true
+        backButton.setTitle("Back".localized, for: .normal)
+        enableSeekButton()
+        stopSearchingBeacons()
+        resetTimer()
+        delayWithSeconds(2) {
+            UIView.animate(withDuration: 2.0, animations: {
+                self.statusLabel.alpha = 0.0
+                self.statusLabel.text = ""
+                self.statusLabel.textColor = UIColor.black
+                
+            })
+        }
+        
+    }
+    
+    func startGame() {
+        self.disableSeekButton()
+        self.seekerLost = false
+        self.seekerWon = false
+        self.gameOn = true
+        self.instructionsLabel.text = ""
+        self.instructionsLabel.text = ""
+        var untilGameStarts = 3
+        self.statusLabel.isHidden = false
+        self.statusLabel.alpha = 1.0
+        self.backButton.isHidden = true
+        self.statusLabel.text = self.readyOrNot[untilGameStarts]
+        
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1.3, repeats: true, block: { (timer) in
+            untilGameStarts -= 1
+            self.seekButton.setTitle("\(untilGameStarts)", for: .normal)
+            self.statusLabel.text = self.readyOrNot[untilGameStarts]
+            
+            if untilGameStarts == 0 {
+                var distance = "3 feet"
+                if self.distanceSetting == .meters { distance = "1 meter" }
+                self.instructionsLabel.text = "Get within \(distance) of Hider".localized
+                self.pauseTimer()
+                self.backButton.setTitle("Stop".localized, for: .normal)
+                self.backButton.isHidden = false
+                self.seekButton.layer.borderColor = UIColor.goGreen.cgColor
+                self.seekButton.setTitleColor(UIColor.goGreen, for: .normal)
+                self.seekButton.setTitle("Seeking".localized, for: .normal)
+                self.delayWithSeconds(2, completion: {
+                    self.instructionsLabel.text = ""
+                    self.broadcastBeacons()
+                    self.discoverBeacons()
+                    
+                })
+            }
+        })
+    }
+
+    func determineIfSeekerWon(hiderBeacon: CLBeacon) -> Bool {
+        
+        if hiderBeacon.major == 666 {
+            presentUserWon()
+            return true
+        }
+        
+        if distanceSetting == .feet {
+            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: hiderBeacon.accuracy))
+            if accuracyInFeet < "3.00" {
+                presentUserWon()
+                return true
+            }
+        } else {
+            let accuracyInMeters = String(format: "%.2f", hiderBeacon.accuracy)
+            if accuracyInMeters < "1.00" {
+                presentUserWon()
+                return true
+            }
+        }
+        return false
+    }
+    
+    func determineIfSeekerLost(hiderBeacon: CLBeacon) -> Bool {
+        if hiderBeacon.major == 777 {
+            presentUserLost()
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    // MARK: Locate Beacon Methods
+    
+    func initializeLocationManager(callback:(Bool) -> Void) {
+        if CLLocationManager.authorizationStatus() == .authorizedAlways {
+            // Granted
+            locationManager = CLLocationManager()
+            locationManager.delegate = self
+            
+            guard let unwrappedUUID = self.uuid, let uuid = UUID(uuidString: unwrappedUUID) else {
+                callback(false)
+                self.presentScanQRCode()
+                return
+            }
+            hiderBeacon = CLBeaconRegion(proximityUUID: uuid, identifier: "com.PatrickRidd.Timed-N-Seek-Hider")
+            hiderBeacon.notifyOnEntry = true
+            hiderBeacon.notifyOnExit = true
+            
+            locationManager.startMonitoring(for: hiderBeacon)
+            locationManager.startUpdatingLocation()
+            callback(true)
+        } else {
+            self.presentNeedLocationPermission()
+            callback(false)
+        }
+    }
+    
+    func discoverBeacons() {
+            self.initializeLocationManager(callback: { (success) in
+                if !success {
+                    resetGame()
+                }
+            })
+    }
+    
+    func stopSearchingBeacons() {
+        if hiderBeacon != nil {
+            locationManager.stopMonitoring(for: hiderBeacon)
+            locationManager.stopRangingBeacons(in: hiderBeacon)
+            locationManager.stopUpdatingLocation()
+        }
+    }
+
     // MARK: CLLocationManagerDelegate functions
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .authorizedAlways:
@@ -121,7 +319,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             }
             locationManager.stopRangingBeacons(in: region)
         } else {
-           // self.presentCantFindBeacon()
+            // self.presentCantFindBeacon()
         }
     }
     
@@ -134,114 +332,14 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
     
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
-       // self.presentCantFindBeacon()
+        // self.presentCantFindBeacon()
         print("Monitring did fail: \(error)")
     }
     
     func locationManager(_ manager: CLLocationManager, rangingBeaconsDidFailFor region: CLBeaconRegion, withError error: Error) {
         print("failed: \(error)")
     }
-    
-    // MARK: Main
-    
-    
-    func initializeLocationManager(callback:(Bool) -> Void) {
-        if CLLocationManager.authorizationStatus() == .authorizedAlways {
-            // Granted
-            locationManager = CLLocationManager()
-            locationManager.delegate = self
-            
-            guard let unwrappedUUID = self.uuid, let uuid = UUID(uuidString: unwrappedUUID) else {
-                callback(false)
-                self.presentScanQRCode()
-                return
-            }
-            hiderBeacon = CLBeaconRegion(proximityUUID: uuid, identifier: "com.PatrickRidd.Timed-N-Seek-Hider")
-            hiderBeacon.notifyOnEntry = true
-            hiderBeacon.notifyOnExit = true
-            
-            locationManager.startMonitoring(for: hiderBeacon)
-            locationManager.startUpdatingLocation()
-            callback(true)
-        } else {
-            self.presentNeedLocationPermission()
-            callback(false)
-        }
-    }
-    
-    func toggleDiscovery() {
-        if !isSearching {
-            self.initializeLocationManager(callback: { (success) in
-                if success {
-                    isSearching = true
-                } else {
-                    resetGame()
-                }
-            })
-        } else {
-            stopLocatingHider()
-            isSearching = false
-            updateButtonTitle()
-        }
-    }
-    
-    func updateSatusLabels(beacons: [CLBeacon]) {
-        statusLabel.isHidden = false
-        guard let beacon = beacons.first else { self.presentCantFindBeacon(); return }
-        if elapsedTimeInSecond == self.startTime {
-            startTimer()
-        }
 
-        displayDistance(for: beacon)
-        seekerWon = determineIfSeekerWon(hiderBeacon: beacon)
-        seekerLost = determineIfSeekerLost(hiderBeacon: beacon)
-       
-        if !seekerWon && !seekerLost {
-            self.delayWithSeconds(0.5) {
-                self.isSearching = false
-                self.toggleDiscovery()
-            }
-        } 
-    }
-    
-    func resetGame() {
-        isSearching = true
-        stopLocatingHider()
-        instructionsLabel.isHidden = true
-        backButton.setTitle("Back".localized, for: .normal)
-        enableSeekButton()
-        isSearching = true
-        toggleDiscovery()
-        resetTimer()
-        delayWithSeconds(2) {
-            UIView.animate(withDuration: 2.0, animations: {
-                self.statusLabel.alpha = 0.0
-                self.statusLabel.text = ""
-                self.statusLabel.textColor = UIColor.black
-
-            })
-        }
-
-    }
-    
-    func setSeekButtonToNormal() {
-        self.seekButton.setTitle("Seek".localized, for: .normal)
-        self.seekButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        self.seekButton.layer.borderColor = UIColor.myBlue.cgColor
-        self.seekButton.setTitleColor(UIColor.myBlue, for: .normal)
-    }
-    
-    func startTimer() {
-        self.updateTimeLabel()
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (timer) in
-            self.elapsedTimeInSecond -= 1
-            self.updateTimeLabel()
-            if self.elapsedTimeInSecond == 0 {
-                self.presentUserLost()
-            }
-        })
-        
-    }
     
     // MARK: User Alert Messages
     
@@ -263,8 +361,8 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         self.gameOn = false
         self.statusLabel.textColor = UIColor.green
         statusLabel.text = "You found the Hider!! You won!".localized
-        isBroadcasting = false
-        checkBroadcastState()
+        // TODO: Either Broadcast loss or not
+
         resetGame()
     }
     
@@ -274,8 +372,8 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         self.gameOn = false
         self.statusLabel.textColor = UIColor.geraldine
         self.statusLabel.text = "You Lost!!!".localized
-        isBroadcasting = false
-        checkBroadcastState()
+        // TODO: Either Broadcast loss or not
+        
         resetGame()
     }
     
@@ -317,6 +415,27 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
 
     // MARK: Timer methods
     
+    func startTimer() {
+        self.updateTimeLabel()
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (timer) in
+            self.elapsedTimeInSecond -= 1
+            self.updateTimeLabel()
+            if self.elapsedTimeInSecond == 0 {
+                self.presentUserLost()
+            }
+        })
+        
+    }
+
+    func pauseTimer() {
+        timer?.invalidate()
+    }
+    
+    func resetTimer() {
+        timer?.invalidate()
+        reloadSeconds()
+    }
+    
     func reloadSeconds() {
         switch self.timeSetting {
         case .twentySeconds:
@@ -329,83 +448,21 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         
         self.startTime = elapsedTimeInSecond
     }
-    
-    func pauseTimer() {
-        timer?.invalidate()
-    }
-    
-    func resetTimer() {
-        timer?.invalidate()
-        reloadSeconds()
-    }
+
     
     func updateTimeLabel() {
         let seconds = elapsedTimeInSecond % 60
         self.seekButton.titleLabel?.font = UIFont.systemFont(ofSize: 28)
         self.seekButton.setTitle(String(format: "%2d", elapsedTimeInSecond), for: .normal)
     }
-
     
-    func updateButtonTitle() {
-        if isSearching {
-            self.seekButton.layer.borderColor = UIColor.green.cgColor
-            self.seekButton.setTitleColor(UIColor.green, for: .normal)
-        } else {
-            setSeekButtonToNormal()
-        }
-    }
-    
-    func startGame() {
-        self.disableSeekButton()
-        self.seekerLost = false
-        self.seekerWon = false
-        self.gameOn = true
-        self.instructionsLabel.text = ""
-        self.instructionsLabel.text = ""
-        var untilGameStarts = 3
-        self.statusLabel.isHidden = false
-        self.statusLabel.alpha = 1.0
-        self.backButton.isHidden = true
-        self.statusLabel.text = self.readyOrNot[untilGameStarts]
-        
-        self.timer = Timer.scheduledTimer(withTimeInterval: 1.3, repeats: true, block: { (timer) in
-            untilGameStarts -= 1
-            self.seekButton.setTitle("\(untilGameStarts)", for: .normal)
-            self.statusLabel.text = self.readyOrNot[untilGameStarts]
-            
-            if untilGameStarts == 0 {
-                var distance = "3 feet"
-                if self.distanceSetting == .meters { distance = "1 meter" }
-                self.instructionsLabel.text = "Get within \(distance) of Hider".localized
-                self.pauseTimer()
-                self.backButton.setTitle("Stop".localized, for: .normal)
-                self.backButton.isHidden = false
-                self.seekButton.layer.borderColor = UIColor.goGreen.cgColor
-                self.seekButton.setTitleColor(UIColor.goGreen, for: .normal)
-                self.seekButton.setTitle("Seeking".localized, for: .normal)
-                self.delayWithSeconds(2, completion: {
-                    self.instructionsLabel.text = ""
-                    self.checkBroadcastState()
-                    self.toggleDiscovery()
-
-                })
-            }
-        })
-    }
-   
     // MARK: Actions
     @IBAction func startButtonPressed(sender:Any){
         resetTimer()
-        if !isSearching {
-            
-            startGame()
-        } else {
-            self.toggleDiscovery()
-        }
+        startGame()
     }
     
     func backOrStopButtonTapped() {
-        
         if backButton.titleLabel?.text == "Back".localized {
             if let presenter = self.presentingViewController{
                 presenter.dismiss(animated: true, completion: nil)
@@ -416,7 +473,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         }
     }
     
+    
     // MARK: Helpers
+    
     func getProximityString(proximity: CLProximity) -> String {
         switch proximity {
         case .immediate:
@@ -430,45 +489,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         }
     }
     
-    func stopLocatingHider() {
-        if hiderBeacon != nil {
-            locationManager.stopMonitoring(for: hiderBeacon)
-            locationManager.stopRangingBeacons(in: hiderBeacon)
-            locationManager.stopUpdatingLocation()
-        }
-    }
-    
-    func determineIfSeekerWon(hiderBeacon: CLBeacon) -> Bool {
-        
-        if hiderBeacon.major == 666 {
-            presentUserWon()
-            return true
-        }
-        
-        if distanceSetting == .feet {
-            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: hiderBeacon.accuracy))
-            if accuracyInFeet < "3.00" {
-                presentUserWon()
-                return true
-            }
-        } else {
-            let accuracyInMeters = String(format: "%.2f", hiderBeacon.accuracy)
-            if accuracyInMeters < "1.00" {
-                presentUserWon()
-                return true
-            }
-        }
-        return false
-    }
-    
-    func determineIfSeekerLost(hiderBeacon: CLBeacon) -> Bool {
-        if hiderBeacon.major == 777 {
-            presentUserLost()
-            return true
-        } else {
-            return false
-        }
-    }
     
     func displayDistance(for beacon: CLBeacon) {
         if distanceSetting == .feet {
@@ -494,39 +514,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         }
     }
 
-    func disableSeekButton() {
-        seekButton.isEnabled = false
-    }
-    
-    func enableSeekButton() {
-        seekButton.layer.borderColor = UIColor.myBlue.cgColor
-        seekButton.setTitleColor(UIColor.myBlue, for: .normal)
-        seekButton.isEnabled = true
-        seekButton.isHidden = false
-
-    }
-    
-    /**
-     Fade in a view with a duration
-     
-     - parameter duration: custom animation duration
-     */
-    func fadeIn(withDuration duration: TimeInterval = 1.0, view: UIView) {
-        UIView.animate(withDuration: duration, animations: {
-            view.alpha = 1.0
-        })
-    }
-    
-    /**
-     Fade out a view with a duration
-     
-     - parameter duration: custom animation duration
-     */
-    func fadeOut(withDuration duration: TimeInterval = 1.0, view: UIView) {
-        UIView.animate(withDuration: duration, animations: {
-            view.alpha = 0.0
-        })
-    }
     
     // MARK: CBPeripheralManagerDelegate
     
@@ -544,10 +531,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
     
     
-    // MARK: Broadcast Beacon
+    // MARK: Broadcasting Beacon methods
     
-    func checkBroadcastState() {
-        if !isBroadcasting {
+    func broadcastBeacons() {
             // Attempt to broadcast
             switch peripheralManager.state {
             case .poweredOn:
@@ -563,12 +549,45 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             case .unsupported:
                 break
             }
+    }
+    
+    
+    func stopBroadcastingBeacon() {
+        peripheralManager.stopAdvertising()
+    }
+    
+    
+    func determineBeaconToCreate() {
+        peripheralManager.stopAdvertising()
+        if seekerLost {
+            // create seekerLost beacon
+            seekerBeacon = self.createSeekerLostBeacon()
+        } else if seekerWon {
+            // create seekerWonBeacon
+            seekerBeacon = self.createSeekerWonBeacon()
         } else {
-            // Stop broadcasting
-            peripheralManager.stopAdvertising()
-            isBroadcasting = false
+            // Seeker is Seeking
+            seekerBeacon = self.createBeaconRegion()
+        }
+        
+        advertiseSeekerBeacon()
+    }
+    
+    func advertiseSeekerBeacon() {
+        guard seekerBeacon != nil else { return }
+        guard let dataDictionary = seekerBeacon.peripheralData(withMeasuredPower: nil) as? [String: Any] else {
+            showAlert(title: "Error Connecting".localized, message: "We are having trouble signaling the device. Please try again.".localized)
+            return
+        }
+        peripheralManager.startAdvertising(dataDictionary)
+        print("\(seekerBeacon.major ?? 0)")
+        if seekerLost || seekerWon {
+            delayWithSeconds(1, completion: {
+                self.stopBroadcastingBeacon()
+            })
         }
     }
+
     
     func createBeaconRegion() -> CLBeaconRegion? {
         guard let uuidString = self.uuid, let uuid = UUID(uuidString: uuidString), let major = CLBeaconMajorValue(self.seekerMajorMinor), let minor = CLBeaconMinorValue(self.seekerMajorMinor) else {
@@ -593,39 +612,5 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
 
     
-    func determineBeaconToCreate() {
-        peripheralManager.stopAdvertising()
-        if seekerLost {
-            // create seekerLost beacon
-            seekerBeacon = self.createSeekerLostBeacon()
-        } else if seekerWon {
-            // create seekerWonBeacon
-            seekerBeacon = self.createSeekerWonBeacon()
-        } else {
-            // Seeker is Seeking
-            seekerBeacon = self.createBeaconRegion()
-        }
-        
-        advertiseSeekerBeacon()
-    }
-
-    func advertiseSeekerBeacon() {
-        guard seekerBeacon != nil else { return }
-        guard let dataDictionary = seekerBeacon.peripheralData(withMeasuredPower: nil) as? [String: Any] else {
-            showAlert(title: "Error Connecting".localized, message: "We are having trouble signaling the device. Please try again.".localized)
-            isBroadcasting = false
-            return
-        }
-        peripheralManager.startAdvertising(dataDictionary)
-        print("\(seekerBeacon.major ?? 0)")
-        if seekerLost || seekerWon {
-            delayWithSeconds(1, completion: {
-                self.isBroadcasting = true
-                 self.checkBroadcastState()
-                self.peripheralManager.stopAdvertising()
-
-            })
-        }
-    }
-
+    
 }
