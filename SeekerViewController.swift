@@ -57,7 +57,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         locationManager = CLLocationManager()
         locationManager.requestAlwaysAuthorization()
         peripheralManager = CBPeripheralManager(delegate: self as CBPeripheralManagerDelegate, queue: nil, options: nil)
-        backButton.addTarget(self, action: #selector(backOrStopButtonTapped), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
         backButton.setTitleColor(UIColor.geraldine, for: .normal)
         loadingAnimation()
         
@@ -88,9 +88,21 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
 
     func setButtonToSeeking() {
-        self.seekButton.setTitle("Seeking", for: .normal)
+        self.seekButton.setTitle("Seeking".localized, for: .normal)
         self.seekButton.layer.borderColor = UIColor.green.cgColor
         self.seekButton.setTitleColor(UIColor.green, for: .normal)
+    }
+    
+    func setBackButtonToReset() {
+        self.backButton.setTitle("Reset".localized, for: .normal)
+    }
+    
+    func setBackButtonToBack() {
+        self.backButton.setTitle("Back".localized, for: .normal)
+    }
+    
+    func setBackButtonToStop() {
+        self.backButton.setTitle("Stop".localized, for: .normal)
     }
     
     func disableSeekButton() {
@@ -150,7 +162,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func resetGame() {
         stopSearchingBeacons()
         instructionsLabel.isHidden = true
-        backButton.setTitle("Back".localized, for: .normal)
+        setBackButtonToBack()
         enableSeekButton()
         stopSearchingBeacons()
         resetTimer()
@@ -188,11 +200,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
                 if self.distanceSetting == .meters { distance = "1 meter" }
                 self.instructionsLabel.text = "Get within \(distance) of Hider".localized
                 self.pauseTimer()
-                self.backButton.setTitle("Stop".localized, for: .normal)
+                self.setBackButtonToStop()
                 self.backButton.isHidden = false
-                self.seekButton.layer.borderColor = UIColor.goGreen.cgColor
-                self.seekButton.setTitleColor(UIColor.goGreen, for: .normal)
-                self.seekButton.setTitle("Seeking".localized, for: .normal)
+                self.setButtonToSeeking()
                 self.delayWithSeconds(2, completion: {
                     self.instructionsLabel.text = ""
                     self.broadcastBeacons()
@@ -462,7 +472,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         startGame()
     }
     
-    func backOrStopButtonTapped() {
+    func backButtonPressed() {
         if backButton.titleLabel?.text == "Back".localized {
             if let presenter = self.presentingViewController{
                 presenter.dismiss(animated: true, completion: nil)
