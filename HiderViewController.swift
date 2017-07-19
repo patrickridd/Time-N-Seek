@@ -123,6 +123,10 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     func setStopButton() {
         self.backButton.setTitle("Stop".localized, for: .normal)
     }
+    
+    func setResetButton() {
+        self.backButton.setTitle("Reset", for: .normal)
+    }
 
     func resetStatusLabel() {
         self.statusLabel.text = ""
@@ -167,6 +171,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         
         self.hiderLost = true
         setBeaconStatusToHide()
+        setResetButton()
         self.statusLabel.textColor = UIColor.geraldine
         self.statusLabel.text = "The Seeker found you. You lost!".localized
         
@@ -180,8 +185,10 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         
         self.hiderWon = true
         setBeaconStatusToHide()
+        setResetButton()
         self.statusLabel.textColor = UIColor.green
         self.statusLabel.text = "You Won!! The seeker ran out of time".localized
+        stopSearchingForBeacon()
     }
 
     
@@ -198,8 +205,9 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
             self.displayDistanceFromSeeker(distance: beacon.accuracy)
         }
         hiderLost = determineIfHiderLost(seekerBeacon: beacon)
+        hiderWon = determineIfHiderWon(seekerBeacon: beacon)
         
-        if !hiderLost {
+        if !hiderLost && !hiderWon {
             delayWithSeconds(0.5, completion: {
                 self.discoverBeacons()
             })
@@ -253,8 +261,8 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     
     func determineIfHiderWon(seekerBeacon: CLBeacon) -> Bool {
         if seekerBeacon.major == 666 {
-            print("666 Seeker Lost, Hider Won")
-            presentHiderLost()
+            print("666 Seeker ran out of time, Hider Won")
+            presentHiderWon()
             return true
         }
         
@@ -280,11 +288,11 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         if backButton.titleLabel?.text == "Back".localized {
             closeWindow()
         } else {
-            stopGameButtonPressed()
+            stopResetGameButtonPressed()
         }
     }
     
-    func stopGameButtonPressed() {
+    func stopResetGameButtonPressed() {
         resetGame()
     }
     

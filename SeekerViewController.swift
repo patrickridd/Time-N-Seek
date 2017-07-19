@@ -171,6 +171,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         vibrate()
         self.seekerWon = true
         self.statusLabel.textColor = UIColor.green
+        self.setButtonToSeek()
         statusLabel.text = "You found the Hider!! You won!".localized
         setBackButtonToReset()
         //Broadcast to Hider that Seeker won
@@ -181,6 +182,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         vibrate()
         self.seekerLost = true
         setBackButtonToReset()
+        self.setButtonToSeek()
         self.statusLabel.textColor = UIColor.geraldine
         self.statusLabel.text = "You Lost!!!".localized
         
