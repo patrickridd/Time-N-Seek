@@ -167,7 +167,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         self.present(alert, animated: true, completion: nil)
     }
     
-    func presentUserWon() {
+    func presentSeekerWon() {
         vibrate()
         self.seekerWon = true
         self.statusLabel.textColor = UIColor.green
@@ -177,7 +177,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         broadcastBeacons()
     }
     
-    func presentUserLost() {
+    func presentSeekerLost() {
         vibrate()
         self.seekerLost = true
         setBackButtonToReset()
@@ -293,20 +293,20 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func determineIfSeekerWon(hiderBeacon: CLBeacon) -> Bool {
         
         if hiderBeacon.major == 666 {
-            presentUserWon()
+            presentSeekerWon()
             return true
         }
         
         if distanceSetting == .feet {
             let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: hiderBeacon.accuracy))
             if accuracyInFeet < "3.00" {
-                presentUserWon()
+                presentSeekerWon()
                 return true
             }
         } else {
             let accuracyInMeters = String(format: "%.2f", hiderBeacon.accuracy)
             if accuracyInMeters < "1.00" {
-                presentUserWon()
+                presentSeekerWon()
                 return true
             }
         }
@@ -315,7 +315,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     func determineIfSeekerLost(hiderBeacon: CLBeacon) -> Bool {
         if hiderBeacon.major == 777 {
-            presentUserLost()
+            presentSeekerLost()
             return true
         } else {
             return false
@@ -526,7 +526,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             self.elapsedTimeInSecond -= 1
             self.updateTimeLabel()
             if self.elapsedTimeInSecond == 0 {
-                self.presentUserLost()
+                self.presentSeekerLost()
             }
         })
         

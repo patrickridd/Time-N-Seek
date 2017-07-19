@@ -59,7 +59,11 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     }
     
     
-      // MARK: UI methods
+    
+    ///////////////////////////////////////////////////////////////
+    //                     MARK: UI Methods                      //
+    ///////////////////////////////////////////////////////////////
+
     
     func setupOpeningLabel() {
         var measurement = ""
@@ -102,6 +106,15 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         self.hideButton.setTitleColor(UIColor.myBlue, for: .normal)
     }
     
+    func disableHideButton() {
+        hideButton.isEnabled = false
+    }
+    
+    func enableHideButton() {
+        hideButton.isEnabled = true
+        hideButton.isHidden = false
+    }
+    
     func setBackButton() {
         self.backButton.addTarget(self, action: #selector(backOrStopButtonTapped), for: .touchUpInside)
         self.backButton.setTitle("Back".localized, for: .normal)
@@ -115,64 +128,11 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         self.statusLabel.text = ""
     }
 
-    
-    // MARK: CBPeripheralManagerDelegate
-    
-    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
-        switch peripheral.state {
-        case .poweredOn:
-            break
-        case .poweredOff:
-            self.presentBlueToothNotEnabled()
-        case .resetting:
-            break
-        case .unauthorized:
-            break
-        case .unsupported:
-            break
-        case .unknown:
-            break
-        }
-    }
-    
-    func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
-        peripheral.setDesiredConnectionLatency(.low, for: request.central)
-    }
-    
-    
-    // MARK: Actions
-    
-    @IBAction func startButtonPressed(sender:Any){
-        setStopButton()
-        setBeaconStatusToHiding()
-        resetStatusLabel()
-        broadcastBeacon()
-        hiderLost = false
-        hiderWon = false
-        self.discoverBeacons()
-    }
-    
-    func backOrStopButtonTapped() {
-        
-        if backButton.titleLabel?.text == "Back".localized {
-            closeWindow()
-        } else {
-            stopGameButtonPressed()
-        }
-    }
-    
-    func stopGameButtonPressed() {
-        resetGame()
-        resetStatusLabel()
-    }
-    
-    func closeWindow() {
-        if let presenter = self.presentingViewController{
-            presenter.dismiss(animated: true, completion: nil)
-        }
-    }
-    
-    // MARK: Alerts
+    ///////////////////////////////////////////////////////////////
+    //                  MARK: UI Alert Messages                  //
+    ///////////////////////////////////////////////////////////////
+
+  
     
     func showAlert(title:String, message:String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -200,20 +160,145 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         alert.addAction(settingsAction)
         self.present(alert, animated: true, completion: nil)
     }
-
-
     
-    func presentUserLost() {
+    func presentHiderLost() {
         vibrate()
+        // Set ring tone
+        
         self.hiderLost = true
         setBeaconStatusToHide()
         self.statusLabel.textColor = UIColor.geraldine
         self.statusLabel.text = "The Seeker found you. You lost!".localized
+        
+        // Broadcast appropriate beacon
+        self.broadcastBeacon()
+    }
+    
+    func presentHiderWon() {
+        vibrate()
+        //set ring tone
+        
+        self.hiderWon = true
+        setBeaconStatusToHide()
+        self.statusLabel.textColor = UIColor.green
+        self.statusLabel.text = "You Won!! The seeker ran out of time".localized
+    }
+
+    
+    ///////////////////////////////////////////////////////////////
+    //                  MARK: Gameplay methods                   //
+    ///////////////////////////////////////////////////////////////
+    
+    
+    func updateSatusLabels(beacons: [CLBeacon]) {
+        statusLabel.isHidden = false
+        guard let beacon = beacons.first else { return }
+        
+        DispatchQueue.main.async {
+            self.displayDistanceFromSeeker(distance: beacon.accuracy)
+        }
+        hiderLost = determineIfHiderLost(seekerBeacon: beacon)
+        
+        if !hiderLost {
+            delayWithSeconds(0.5, completion: {
+                self.discoverBeacons()
+            })
+        }
+    }
+    
+    func resetGame() {
+        stopSearchingForBeacon()
+        hiderWon = false
+        hiderLost = false
+        stopBroadCasting()
+        setBackButton()
+        resetStatusLabel()
+    }
+    
+    func displayDistanceFromSeeker(distance: CLLocationAccuracy) {
+        var accuracy = ""
+        if distanceSetting == .feet {
+            accuracy = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance))
+            statusLabel.text = "Seeker is \(accuracy)ft away".localized
+        } else {
+            accuracy = String(format: "%.2f", distance)
+            statusLabel.text = "Seeker is \(accuracy)m away".localized
+        }
+    }
+    
+    func determineIfHiderLost(seekerBeacon: CLBeacon) -> Bool {
+        print(seekerBeacon.major)
+        if seekerBeacon.major == 777 {
+            print("777 Seeker Won, Hider Lost")
+            presentHiderLost()
+            return true
+        }
+        
+        if distanceSetting == .feet {
+            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: seekerBeacon.accuracy))
+            if accuracyInFeet < "3.00" {
+                presentHiderLost()
+                return true
+            }
+            
+        } else {
+            let accuracyInMeters = String(format: "%.2f", seekerBeacon.accuracy)
+            if accuracyInMeters < "1.00" {
+                presentHiderLost()
+                return true
+            }
+        }
+        return false
+    }
+    
+    func determineIfHiderWon(seekerBeacon: CLBeacon) -> Bool {
+        if seekerBeacon.major == 666 {
+            print("666 Seeker Lost, Hider Won")
+            presentHiderLost()
+            return true
+        }
+        
+        return false
+    }
+
+    
+    ///////////////////////////////////////////////////////////////
+    //                      MARK: Actions                        //
+    ///////////////////////////////////////////////////////////////
+
+    
+    @IBAction func startButtonPressed(sender:Any){
+        setStopButton()
+        setBeaconStatusToHiding()
+        resetStatusLabel()
+        broadcastBeacon()
+        discoverBeacons()
+    }
+    
+    func backOrStopButtonTapped() {
+        
+        if backButton.titleLabel?.text == "Back".localized {
+            closeWindow()
+        } else {
+            stopGameButtonPressed()
+        }
+    }
+    
+    func stopGameButtonPressed() {
         resetGame()
     }
     
+    func closeWindow() {
+        if let presenter = self.presentingViewController{
+            presenter.dismiss(animated: true, completion: nil)
+        }
+    }
     
-    // MARK: Helpers
+    
+    ///////////////////////////////////////////////////////////////
+    //                 MARK: Helper Methods                      //
+    ///////////////////////////////////////////////////////////////
+
     
     func vibrate() {
         AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
@@ -223,27 +308,21 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         return distanceInMeters * 3.28084
     }
     
-    func disableHideButton() {
-        hideButton.isEnabled = false
+    func delayWithSeconds(_ seconds: Double, completion: @escaping () -> ()) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+            completion()
+        }
     }
-    
-    func enableHideButton() {
-        hideButton.layer.borderColor = UIColor.myBlue.cgColor
-        hideButton.setTitleColor(UIColor.myBlue, for: .normal)
-        hideButton.isEnabled = true
-        hideButton.isHidden = false
-    }
+
     
     
-    // MARK: Broadcasting methods
+    ///////////////////////////////////////////////////////////////
+    //              MARK: Broadcasting methods                   //
+    ///////////////////////////////////////////////////////////////
+    
     
     func stopBroadCasting() {
-        // Stop broadcasting
         peripheralManager.stopAdvertising()
-        setBeaconStatusToHide()
-        setBackButton()
-        hiderLost = false
-        hiderWon = false
     }
     
     func broadcastBeacon() {
@@ -262,6 +341,23 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         case .unsupported:
             break
         }
+    }
+    
+    
+    func determineBeaconToCreate() {
+        peripheralManager.stopAdvertising()
+        if hiderLost {
+            // create hiderLost beacon
+            hiderBeacon = self.createHiderLostBeacon()
+        } else if hiderWon {
+            // create hiderWonBeacon
+            hiderBeacon = self.createHiderWonBeacon()
+        } else {
+            // Hider is Hiding
+            hiderBeacon = self.createBeaconRegion()
+        }
+        
+        advertiseHiderBeacon()
     }
     
     func createBeaconRegion() -> CLBeaconRegion? {
@@ -284,24 +380,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         return CLBeaconRegion(proximityUUID: uuid, major: CLBeaconMajorValue(major), minor: CLBeaconMinorValue(minor), identifier: "com.PatrickRidd.Timed-N-Seek-Hider")
         
     }
-    
-    
-    func determineBeaconToCreate() {
-        peripheralManager.stopAdvertising()
-        if hiderLost {
-            // create hiderLost beacon
-            hiderBeacon = self.createHiderLostBeacon()
-        } else if hiderWon {
-            // create hiderWonBeacon
-            hiderBeacon = self.createHiderWonBeacon()
-        } else {
-            // Hider is Hiding
-            hiderBeacon = self.createBeaconRegion()
-        }
-        
-        advertiseHiderBeacon()
-    }
-    
+
     func advertiseHiderBeacon() {
         guard hiderBeacon != nil else { return }
         guard let dataDictionary = hiderBeacon.peripheralData(withMeasuredPower: nil) as? [String: Any] else {
@@ -310,21 +389,39 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         }
         peripheralManager.startAdvertising(dataDictionary)
         
-        if hiderLost || hiderWon {
-            delayWithSeconds(1, completion: {
-                self.stopSearchingForBeacon()
-                self.stopBroadCasting()
-            })
+    }
+    
+    
+    ///////////////////////////////////////////////////////////////
+    //          MARK: CBPeripheralManagerDelegate                //
+    ///////////////////////////////////////////////////////////////
+    
+    
+    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
+        switch peripheral.state {
+        case .poweredOn:
+            break
+        case .poweredOff:
+            self.presentBlueToothNotEnabled()
+        case .resetting:
+            break
+        case .unauthorized:
+            break
+        case .unsupported:
+            break
+        case .unknown:
+            break
         }
     }
     
-    func delayWithSeconds(_ seconds: Double, completion: @escaping () -> ()) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-            completion()
-        }
+    func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
+        peripheral.setDesiredConnectionLatency(.low, for: request.central)
     }
     
-    // MARK: Locate Seeker Methods
+    
+    ///////////////////////////////////////////////////////////////
+    //              MARK: Search Beacon Methods                  //
+    ///////////////////////////////////////////////////////////////
     
     func discoverBeacons() {
             self.initializeLocationManager(callback: { (success) in
@@ -356,91 +453,18 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         }
     }
     
-    
     func stopSearchingForBeacon() {
         locationManager.stopMonitoring(for: seekerBeacon)
         locationManager.stopRangingBeacons(in: seekerBeacon)
         locationManager.stopUpdatingLocation()
     }
     
-    // MARK: Gameplay methods
     
-    func updateSatusLabels(beacons: [CLBeacon]) {
-        statusLabel.isHidden = false
-        guard let beacon = beacons.first else { return }
-        
-        DispatchQueue.main.async {
-            self.displayDistanceFromSeeker(distance: beacon.accuracy)
-        }
-        hiderLost = determineIfHiderLost(seekerBeacon: beacon)
-        
-        if !hiderLost {
-            delayWithSeconds(0.5, completion: {
-                self.discoverBeacons()
-            })
-        }
-    }
-
-    func resetGame() {
-        stopSearchingForBeacon()
-        stopBroadCasting()
-        setBackButton()
-        delayWithSeconds(2) {
-            UIView.animate(withDuration: 2.0, animations: {
-                self.statusLabel.alpha = 0.0
-                self.statusLabel.textColor = UIColor.black
-                self.resetStatusLabel()
-            })
-        }
-    }
-
-    func displayDistanceFromSeeker(distance: CLLocationAccuracy) {
-        var accuracy = ""
-        if distanceSetting == .feet {
-            accuracy = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance))
-            statusLabel.text = "Seeker is \(accuracy)ft away".localized
-        } else {
-            accuracy = String(format: "%.2f", distance)
-            statusLabel.text = "Seeker is \(accuracy)m away".localized
-        }
-    }
+    ///////////////////////////////////////////////////////////////
+    //      MARK: CLLocationManagerDelegate functions            //
+    ///////////////////////////////////////////////////////////////
     
-    func determineIfHiderLost(seekerBeacon: CLBeacon) -> Bool {
-        print(seekerBeacon.major)
-        if seekerBeacon.major == 777 {
-            print("777 Seeker Won, Hider Lost")
-            presentUserLost()
-            return true
-        }
-        
-        if distanceSetting == .feet {
-            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: seekerBeacon.accuracy))
-            if accuracyInFeet < "3.00" {
-                presentUserLost()
-                return true
-            }
-            
-        } else {
-            let accuracyInMeters = String(format: "%.2f", seekerBeacon.accuracy)
-            if accuracyInMeters < "1.00" {
-                presentUserLost()
-                return true
-            }
-        }
-        return false
-    }
     
-    func determineIfHiderWon(seekerBeacon: CLBeacon) -> Bool {
-        if seekerBeacon.major == 666 {
-            print("666 Seeker Lost, Hider Won")
-            presentUserLost()
-            return true
-        }
-
-        return false
-    }
-    
-    // MARK: CLLocationManagerDelegate functions
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .authorizedAlways:
@@ -462,7 +486,6 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         locationManager.requestState(for: region)
     }
     
-    
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         switch state {
         case .inside:
@@ -480,7 +503,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
             locationManager.stopRangingBeacons(in: region)
         } else {
             delayWithSeconds(3, completion: {
-                self.statusLabel.text = "Trying to locate Seeker's distance"
+                self.statusLabel.text = "Trying to locate Seeker's distance...".localized
             })
         }
     }
@@ -489,8 +512,6 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         print("Beacon region exited: \(region)")
     }
     
-    
-    
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
         print("Monitring did fail: \(error)")
     }
@@ -498,5 +519,5 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     func locationManager(_ manager: CLLocationManager, rangingBeaconsDidFailFor region: CLBeaconRegion, withError error: Error) {
         print("failed: \(error)")
     }
-
+    
 }
