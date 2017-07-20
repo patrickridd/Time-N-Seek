@@ -25,15 +25,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     var locationManager: CLLocationManager!
     var peripheralManager: CBPeripheralManager!
     
-    
     let seekerMajorMinor = "456"
     let seekerMajorMinorWin = "777"
     let seekerMajorMinorLoss = "666"
     
-    
-    
     let readyOrNot = ["Here I come!!".localized,"Not".localized,"Or".localized,"Ready".localized]
-    
     
     private var timer: Timer?
     private var timeSetting: TimeSetting = .twentySeconds
@@ -62,7 +58,10 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         
     }
     
-    // MARK: UI Methods
+    
+    ///////////////////////////////////////////////////////////////
+    //                     MARK: UI Methods                      //
+    ///////////////////////////////////////////////////////////////
    
     func loadingAnimation() {
         seekButton.alpha = 0.0
@@ -113,13 +112,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         seekButton.setTitleColor(UIColor.myBlue, for: .normal)
         seekButton.isEnabled = true
         seekButton.isHidden = false
-        
     }
     
     func resetStatusLabel() {
         statusLabel.text = ""
     }
-    
     
     func displayDistance(for beacon: CLBeacon) {
         if distanceSetting == .feet {
@@ -153,7 +150,10 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         })
     }
     
-    // MARK: User Alert Messages
+    
+    ///////////////////////////////////////////////////////////////
+    //                MARK: User Alert Methods                   //
+    ///////////////////////////////////////////////////////////////
     
     func presentCantFindBeacon() {
         statusLabel.text = ""
@@ -227,7 +227,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
 
 
-    // MARK: GamePlay Methods
+    ///////////////////////////////////////////////////////////////
+    //                 MARK: Gameplay Methods                    //
+    ///////////////////////////////////////////////////////////////
     
     func startGame() {
         self.disableSeekButton()
@@ -324,7 +326,10 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         }
     }
     
-    // MARK: Search Beacon Methods
+    
+    ///////////////////////////////////////////////////////////////
+    //                MARK: Search Beacon Methods                //
+    ///////////////////////////////////////////////////////////////
     
     func initializeLocationManager(callback:(Bool) -> Void) {
         if CLLocationManager.authorizationStatus() == .authorizedAlways {
@@ -382,13 +387,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         case .restricted:
             break
         }
-        
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         locationManager.requestState(for: region)
     }
-    
     
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         switch state {
@@ -424,24 +427,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func locationManager(_ manager: CLLocationManager, rangingBeaconsDidFailFor region: CLBeaconRegion, withError error: Error) {
         print("failed: \(error)")
     }
+    
 
-    // MARK: CBPeripheralManagerDelegate
-    
-    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
-        switch peripheral.state {
-        case .poweredOn: break
-        case .poweredOff:
-            self.presentBlueToothNotEnabled()
-        case .resetting: break
-        case .unauthorized: break
-        case .unsupported: break
-        case .unknown: break
-            
-        }
-    }
-    
-    
-    // MARK: Broadcasting Beacon methods
+    ///////////////////////////////////////////////////////////////
+    //            MARK: Broadcasting Beacon methods              //
+    ///////////////////////////////////////////////////////////////
     
     func broadcastBeacons() {
         // Attempt to broadcast
@@ -465,7 +455,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func stopBroadcastingBeacon() {
         peripheralManager.stopAdvertising()
     }
-    
     
     func determineBeaconToCreate() {
         peripheralManager.stopAdvertising()
@@ -520,7 +509,27 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         return CLBeaconRegion(proximityUUID: uuid, major: major, minor: minor, identifier: "com.PatrickRidd.Timed-N-Seek-Seeker")
     }
     
-    // MARK: Timer methods
+    ///////////////////////////////////////////////////////////////
+    //             MARK: CBPeripheralManagerDelegate             //
+    ///////////////////////////////////////////////////////////////
+    
+    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
+        switch peripheral.state {
+        case .poweredOn: break
+        case .poweredOff:
+            self.presentBlueToothNotEnabled()
+        case .resetting: break
+        case .unauthorized: break
+        case .unsupported: break
+        case .unknown: break
+            
+        }
+    }
+
+    
+    ///////////////////////////////////////////////////////////////
+    //                      MARK: Timer Methods                  //
+    ///////////////////////////////////////////////////////////////
     
     func startTimer() {
         self.updateTimeLabel()
@@ -531,7 +540,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
                 self.presentSeekerLost()
             }
         })
-        
     }
 
     func pauseTimer() {
@@ -556,14 +564,17 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         self.startTime = elapsedTimeInSecond
     }
 
-    
     func updateTimeLabel() {
-        let seconds = elapsedTimeInSecond % 60
+       // let seconds = elapsedTimeInSecond % 60
         self.seekButton.titleLabel?.font = UIFont.systemFont(ofSize: 28)
         self.seekButton.setTitle(String(format: "%2d", elapsedTimeInSecond), for: .normal)
     }
     
-    // MARK: Actions
+    
+    ///////////////////////////////////////////////////////////////
+    //                      MARK: Actions                        //
+    ///////////////////////////////////////////////////////////////
+    
     @IBAction func startButtonPressed(sender:Any){
         resetTimer()
         startGame()
@@ -580,7 +591,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
     
     
-    // MARK: Helpers
+    ///////////////////////////////////////////////////////////////
+    //                   MARK: Helper Methods                    //
+    ///////////////////////////////////////////////////////////////
     
     func getProximityString(proximity: CLProximity) -> String {
         switch proximity {
