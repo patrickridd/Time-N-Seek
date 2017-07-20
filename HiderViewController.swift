@@ -95,8 +95,8 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     func setBeaconStatusToHiding() {
         self.disableHideButton()
         self.hideButton.setTitle("Hiding".localized, for: .normal)
-        self.hideButton.layer.borderColor = UIColor.goGreen.cgColor
-        self.hideButton.setTitleColor(UIColor.goGreen, for: .normal)
+        self.hideButton.layer.borderColor = UIColor.burntOrange.cgColor
+        self.hideButton.setTitleColor(UIColor.burntOrange, for: .normal)
     }
     
     func setBeaconStatusToHide() {
@@ -104,6 +104,18 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         self.hideButton.setTitle("Hide".localized, for: .normal)
         self.hideButton.layer.borderColor = UIColor.myBlue.cgColor
         self.hideButton.setTitleColor(UIColor.myBlue, for: .normal)
+    }
+    
+    func setButtonToLost() {
+        self.hideButton.setTitle("Lost", for: .normal)
+        self.hideButton.setTitleColor(.geraldine, for: .normal)
+        self.hideButton.layer.borderColor = UIColor.geraldine.cgColor
+    }
+    
+    func setButtonToWon() {
+        self.hideButton.setTitle("Won".localized, for: .normal)
+        self.hideButton.layer.borderColor = UIColor.goGreen.cgColor
+        self.hideButton.setTitleColor(UIColor.goGreen, for: .normal)
     }
     
     func disableHideButton() {
@@ -166,13 +178,19 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     }
     
     func presentHiderLost() {
+        
+        // Set ring tone and vibrate for Hider Losing
         vibrate()
-        // Set ring tone
         
         self.hiderLost = true
-        setBeaconStatusToHide()
+       
+        // Set Buttons to reflect that the Hider Lost
+        setButtonToLost()
         setResetButton()
-        self.statusLabel.textColor = UIColor.geraldine
+        
+        // Blink Lost button
+        
+        
         self.statusLabel.text = "The Seeker found you. You lost!".localized
         
         // Broadcast appropriate beacon
@@ -180,14 +198,24 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     }
     
     func presentHiderWon() {
+       
+        //set ring tone and vibrate for Hider Winning
         vibrate()
-        //set ring tone
         
         self.hiderWon = true
-        setBeaconStatusToHide()
+        
+        // Set Buttons to reflect that the Hider Won
         setResetButton()
-        self.statusLabel.textColor = UIColor.green
+        setButtonToWon()
+        
+        // Blink Lost button
+
+        
         self.statusLabel.text = "You Won!! The seeker ran out of time".localized
+        
+        // If hider wins it means that the time ran out for seeker, so seeker already knows they lost.
+        // So, stop searching and broadcasting.
+        stopBroadCasting()
         stopSearchingForBeacon()
     }
 

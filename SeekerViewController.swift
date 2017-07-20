@@ -183,16 +183,24 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     func presentSeekerWon() {
         vibrate()
+        //play tone to reflect seeker won
+        
         self.seekerWon = true
         self.setButtonToWon()
         statusLabel.text = "You found the Hider!! You won!".localized
         setBackButtonToReset()
+        
         //Broadcast to Hider that Seeker won
         broadcastBeacons()
+       
+        // Call method that makes the seekbutton blink
+
     }
     
     func presentSeekerLost() {
         vibrate()
+        // Play tone to reflect seeker lost
+        
         self.seekerLost = true
         setBackButtonToReset()
         self.setButtonToLost()
@@ -200,6 +208,8 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         
         //Broadcast to Hider that Hider won
         broadcastBeacons()
+        
+        // Call method that makes the seekbutton blink
     }
     
     func presentBlueToothNotEnabled() {
