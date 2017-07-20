@@ -88,6 +88,17 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
                        completion: nil)
     }
     
+    func blinkStatusLabel() {
+        UIView.animate(withDuration: 0.5,
+                       delay: 1.0,
+                       options: [UIViewAnimationOptions.curveLinear,
+                                 UIViewAnimationOptions.repeat,
+                                 UIViewAnimationOptions.autoreverse],
+                       animations: { self.statusLabel.alpha = 0.0 },
+                       completion: nil)
+
+    }
+    
     func setButtonToSeek() {
         self.enableSeekButton()
         self.seekButton.setTitle("Seek".localized, for: .normal)
@@ -99,8 +110,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func setButtonToSeeking() {
         self.disableSeekButton()
         self.seekButton.setTitle("Seeking".localized, for: .normal)
-        self.seekButton.layer.borderColor = UIColor.burntOrange.cgColor
-        self.seekButton.setTitleColor(UIColor.burntOrange, for: .normal)
+        self.blinkSeekButton()
     }
     
     func setButtonToLost() {
@@ -134,6 +144,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func removeBlinkingSeekAnimation() {
         self.seekButton.layer.removeAllAnimations()
         self.seekButton.alpha = 1.0
+    }
+    
+    func removeStatusLabelAnimation() {
+        self.statusLabel.layer.removeAllAnimations()
+        self.statusLabel.alpha = 1.0
     }
     
     func enableSeekButton() {
@@ -203,16 +218,18 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         self.seekerWon = true
         
         self.resetTimer()
+        
+        self.removeBlinkingSeekAnimation()
         self.setButtonToWon()
        
         statusLabel.text = "You found the Hider!!".localized
+        self.blinkStatusLabel()
+        
         setBackButtonToReset()
         
         //Broadcast to Hider that Seeker won
         broadcastBeacons()
        
-        // Call method that makes the seekbutton blink
-        self.blinkSeekButton()
     }
     
     func presentSeekerLost() {
@@ -223,15 +240,16 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         
         self.resetTimer()
         setBackButtonToReset()
+        
+        self.removeBlinkingSeekAnimation()
         self.setButtonToLost()
         
         self.statusLabel.text = "You Lost!!!".localized
+        self.blinkStatusLabel()
         
         //Broadcast to Hider that Hider won
         broadcastBeacons()
         
-        // Call method that makes the seekbutton blink
-        self.blinkSeekButton()
     }
     
     func presentBlueToothNotEnabled() {
@@ -310,12 +328,16 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
 
     func resetGame() {
         stopSearchingBeacons()
+        stopBroadcastingBeacon()
         instructionsLabel.isHidden = true
         setBackButtonToBack()
-        stopSearchingBeacons()
         resetTimer()
-        resetStatusLabel()
+        
+        self.removeStatusLabelAnimation()
         self.removeBlinkingSeekAnimation()
+        
+        resetStatusLabel()
+        
         setButtonToSeek()
         self.seekerLost = false
         self.seekerWon = false

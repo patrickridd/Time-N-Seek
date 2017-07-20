@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="p2I-S4-x5q">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="p2I-S4-x5q">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -147,7 +147,7 @@
                                 </state>
                             </button>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PQF-76-NYR" userLabel="statusLabel" customClass="LocalizedLabel" customModule="Time___Seek" customModuleProvider="target">
-                                <rect key="frame" x="62.5" y="453.5" width="250" height="0.0"/>
+                                <rect key="frame" x="62.5" y="213.5" width="250" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="ciH-yJ-2rn"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="hX6-tm-Ugj"/>
@@ -168,10 +168,10 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="FaY-Rm-6xC" firstAttribute="top" secondItem="PQF-76-NYR" secondAttribute="bottom" constant="20" id="7aO-Fg-2FB"/>
                             <constraint firstItem="FaY-Rm-6xC" firstAttribute="centerX" relation="lessThanOrEqual" secondItem="oUM-y0-0WX" secondAttribute="centerX" id="99C-JZ-fxn"/>
                             <constraint firstAttribute="trailingMargin" secondItem="T43-a8-cec" secondAttribute="trailing" constant="20" id="CDZ-21-T5k"/>
                             <constraint firstItem="T43-a8-cec" firstAttribute="centerY" secondItem="XoR-HF-czo" secondAttribute="centerY" id="DXs-FT-6kA"/>
-                            <constraint firstItem="PQF-76-NYR" firstAttribute="top" secondItem="FaY-Rm-6xC" secondAttribute="bottom" constant="20" id="J25-19-4K0"/>
                             <constraint firstAttribute="bottom" secondItem="oUM-y0-0WX" secondAttribute="bottom" constant="20" symbolic="YES" id="JcH-CV-XFy"/>
                             <constraint firstItem="92v-UJ-Hv8" firstAttribute="top" secondItem="Gxt-cT-UGd" secondAttribute="bottom" constant="30" id="P5N-In-7oz"/>
                             <constraint firstItem="FaY-Rm-6xC" firstAttribute="centerX" secondItem="XoR-HF-czo" secondAttribute="centerX" id="PGd-xl-1ZD"/>
@@ -232,7 +232,7 @@
                                 </connections>
                             </button>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ppI-pF-5dX" customClass="LocalizedLabel" customModule="Time___Seek" customModuleProvider="target">
-                                <rect key="frame" x="62.5" y="453.5" width="250" height="0.0"/>
+                                <rect key="frame" x="62.5" y="213.5" width="250" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="Lum-GQ-2o1"/>
                                 </constraints>
@@ -248,7 +248,7 @@
                                 </state>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YAM-kM-4cT" customClass="LocalizedLabel" customModule="Time___Seek" customModuleProvider="target">
-                                <rect key="frame" x="62.5" y="114" width="250" height="60"/>
+                                <rect key="frame" x="62.5" y="453.5" width="250" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="Lbd-nJ-DSy"/>
                                     <constraint firstAttribute="width" constant="250" id="tCu-my-ipY"/>
@@ -272,14 +272,14 @@
                             <constraint firstItem="l8R-5D-38E" firstAttribute="leading" secondItem="RYX-z0-RUb" secondAttribute="leadingMargin" constant="20" id="1Hs-NK-5mT"/>
                             <constraint firstItem="pCh-6w-mJL" firstAttribute="centerX" secondItem="RYX-z0-RUb" secondAttribute="centerX" id="4uT-cY-UHR"/>
                             <constraint firstItem="dIE-Ul-6KH" firstAttribute="top" secondItem="7Za-oc-XRO" secondAttribute="bottom" constant="30" id="5bC-1x-kEh"/>
-                            <constraint firstItem="ppI-pF-5dX" firstAttribute="top" secondItem="pCh-6w-mJL" secondAttribute="bottom" constant="20" id="E7b-c6-1OL"/>
+                            <constraint firstItem="YAM-kM-4cT" firstAttribute="top" secondItem="pCh-6w-mJL" secondAttribute="bottom" constant="20" id="JZx-fM-BEe"/>
                             <constraint firstItem="ppI-pF-5dX" firstAttribute="centerX" secondItem="RYX-z0-RUb" secondAttribute="centerX" id="MXu-k8-12W"/>
+                            <constraint firstItem="pCh-6w-mJL" firstAttribute="top" secondItem="ppI-pF-5dX" secondAttribute="bottom" constant="20" id="Mpc-9e-xCH"/>
                             <constraint firstItem="l8R-5D-38E" firstAttribute="centerY" secondItem="RYX-z0-RUb" secondAttribute="centerY" id="Qeg-bP-s2A"/>
                             <constraint firstAttribute="trailingMargin" secondItem="l8R-5D-38E" secondAttribute="trailing" constant="20" id="TDa-hG-Hl3"/>
                             <constraint firstItem="dIE-Ul-6KH" firstAttribute="trailing" secondItem="RYX-z0-RUb" secondAttribute="trailingMargin" id="pJ1-N4-JaP"/>
                             <constraint firstItem="dIE-Ul-6KH" firstAttribute="leading" secondItem="RYX-z0-RUb" secondAttribute="leadingMargin" id="vSz-Mq-4tt"/>
                             <constraint firstItem="BhZ-0z-Sfi" firstAttribute="centerX" secondItem="RYX-z0-RUb" secondAttribute="centerX" id="vwd-pN-Oht"/>
-                            <constraint firstItem="YAM-kM-4cT" firstAttribute="top" secondItem="dIE-Ul-6KH" secondAttribute="bottom" constant="30" id="wlv-Gw-fcA"/>
                             <constraint firstItem="pCh-6w-mJL" firstAttribute="centerY" secondItem="RYX-z0-RUb" secondAttribute="centerY" id="xLu-vc-S7b"/>
                             <constraint firstItem="YAM-kM-4cT" firstAttribute="centerX" secondItem="RYX-z0-RUb" secondAttribute="centerX" id="xho-BU-t9z"/>
                             <constraint firstItem="acx-fK-qsA" firstAttribute="top" secondItem="BhZ-0z-Sfi" secondAttribute="bottom" constant="20" id="zeY-ai-13n"/>
