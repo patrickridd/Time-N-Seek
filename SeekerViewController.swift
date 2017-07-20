@@ -79,6 +79,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
 
     func setButtonToSeek() {
+        self.enableSeekButton()
         self.seekButton.setTitle("Seek".localized, for: .normal)
         self.seekButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         self.seekButton.layer.borderColor = UIColor.myBlue.cgColor
@@ -86,7 +87,20 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
 
     func setButtonToSeeking() {
+        self.disableSeekButton()
         self.seekButton.setTitle("Seeking".localized, for: .normal)
+        self.seekButton.layer.borderColor = UIColor.burntOrange.cgColor
+        self.seekButton.setTitleColor(UIColor.burntOrange, for: .normal)
+    }
+    
+    func setButtonToLost() {
+        self.seekButton.setTitle("Lost", for: .normal)
+        self.seekButton.layer.borderColor = UIColor.geraldine.cgColor
+        self.seekButton.setTitleColor(.geraldine, for: .normal)
+    }
+    
+    func setButtonToWon() {
+        self.seekButton.setTitle("Won", for: .normal)
         self.seekButton.layer.borderColor = UIColor.green.cgColor
         self.seekButton.setTitleColor(UIColor.green, for: .normal)
     }
@@ -170,8 +184,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func presentSeekerWon() {
         vibrate()
         self.seekerWon = true
-        self.statusLabel.textColor = UIColor.green
-        self.setButtonToSeek()
+        self.setButtonToWon()
         statusLabel.text = "You found the Hider!! You won!".localized
         setBackButtonToReset()
         //Broadcast to Hider that Seeker won
@@ -182,8 +195,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         vibrate()
         self.seekerLost = true
         setBackButtonToReset()
-        self.setButtonToSeek()
-        self.statusLabel.textColor = UIColor.geraldine
+        self.setButtonToLost()
         self.statusLabel.text = "You Lost!!!".localized
         
         //Broadcast to Hider that Hider won

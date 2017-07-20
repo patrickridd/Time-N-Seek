@@ -47,4 +47,8 @@ extension UIColor {
         return UIColor(red: 0.71, green: 0.93, blue: 0.55, alpha: 1.0)
     }
     
+    static var burntOrange: UIColor {
+        return UIColor(red:0.98, green:0.49, blue:0.28, alpha: 1.0)
+    }
+    
 }
