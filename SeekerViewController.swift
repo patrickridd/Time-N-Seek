@@ -39,7 +39,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     var seekerLost = false
     var seekerWon = false
-    var isBlinking = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,16 +79,13 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
     
     func blinkSeekButton() {
-        isBlinking = true
-        
-        while isBlinking {
-            delayWithSeconds(0.5) {
-                self.seekButton.isHidden = true
-            }
-            delayWithSeconds(0.5) {
-                self.seekButton.isHidden = false
-            }
-        }
+        UIView.animate(withDuration: 0.5,
+                       delay: 1.0,
+                       options: [UIViewAnimationOptions.curveLinear,
+                                 UIViewAnimationOptions.repeat,
+                                 UIViewAnimationOptions.autoreverse],
+                       animations: { self.seekButton.alpha = 0.0 },
+                       completion: nil)
     }
     
     func setButtonToSeek() {
@@ -133,6 +129,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     func disableSeekButton() {
         seekButton.isEnabled = false
+    }
+    
+    func removeBlinkingSeekAnimation() {
+        self.seekButton.layer.removeAllAnimations()
+        self.seekButton.alpha = 1.0
     }
     
     func enableSeekButton() {
@@ -200,8 +201,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         //play tone to reflect seeker won
         
         self.seekerWon = true
+        
+        self.resetTimer()
         self.setButtonToWon()
-        statusLabel.text = "You found the Hider!! You won!".localized
+       
+        statusLabel.text = "You found the Hider!!".localized
         setBackButtonToReset()
         
         //Broadcast to Hider that Seeker won
@@ -216,8 +220,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         // Play tone to reflect seeker lost
         
         self.seekerLost = true
+        
+        self.resetTimer()
         setBackButtonToReset()
         self.setButtonToLost()
+        
         self.statusLabel.text = "You Lost!!!".localized
         
         //Broadcast to Hider that Hider won
@@ -284,7 +291,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             
             if untilGameStarts == 0 {
                 var distance = "3 feet"
-                if self.distanceSetting == .meters { distance = "1 meter" }
+                if self.distanceSetting == .meters { distance = "1 meter".localized }
                 self.instructionsLabel.text = "Get within \(distance) of Hider".localized
                 self.pauseTimer()
                 self.setBackButtonToStop()
@@ -292,6 +299,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
                 self.setButtonToSeeking()
                 self.delayWithSeconds(2, completion: {
                     self.instructionsLabel.text = ""
+                    self.statusLabel.text = "Locating Hider's Position...".localized
                     self.broadcastBeacons()
                     self.discoverBeacons()
                     
@@ -304,10 +312,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         stopSearchingBeacons()
         instructionsLabel.isHidden = true
         setBackButtonToBack()
-        enableSeekButton()
         stopSearchingBeacons()
         resetTimer()
         resetStatusLabel()
+        self.removeBlinkingSeekAnimation()
+        setButtonToSeek()
         self.seekerLost = false
         self.seekerWon = false
     }
