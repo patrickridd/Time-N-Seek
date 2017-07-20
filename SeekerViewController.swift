@@ -23,7 +23,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     var hiderBeacon: CLBeaconRegion!
     var seekerBeacon: CLBeaconRegion!
     var locationManager: CLLocationManager!
-    var peripheralManager: CBPeripheralManager!
+    var blueToothPeripheralManager: CBPeripheralManager!
     
     let seekerMajorMinor = "456"
     let seekerMajorMinorWin = "777"
@@ -51,7 +51,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         seekButton.layer.borderWidth = 1.0
         locationManager = CLLocationManager()
         locationManager.requestAlwaysAuthorization()
-        peripheralManager = CBPeripheralManager(delegate: self as CBPeripheralManagerDelegate, queue: nil, options: nil)
+        blueToothPeripheralManager = CBPeripheralManager(delegate: self as CBPeripheralManagerDelegate, queue: nil, options: nil)
         backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
         backButton.setTitleColor(UIColor.geraldine, for: .normal)
         loadingAnimation()
@@ -435,7 +435,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     func broadcastBeacons() {
         // Attempt to broadcast
-        switch peripheralManager.state {
+        switch blueToothPeripheralManager.state {
         case .poweredOn:
             self.determineBeaconToCreate()
         case .poweredOff:
@@ -453,11 +453,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     
     func stopBroadcastingBeacon() {
-        peripheralManager.stopAdvertising()
+        blueToothPeripheralManager.stopAdvertising()
     }
     
     func determineBeaconToCreate() {
-        peripheralManager.stopAdvertising()
+        blueToothPeripheralManager.stopAdvertising()
         if seekerLost {
             // create seekerLost beacon
             seekerBeacon = self.createSeekerLostBeacon()
@@ -480,7 +480,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             showAlert(title: "Error Connecting".localized, message: "We are having trouble signaling the device. Please try again.".localized)
             return
         }
-        peripheralManager.startAdvertising(dataDictionary)
+        blueToothPeripheralManager.startAdvertising(dataDictionary)
     }
     
     // Creates a normal seeker beacon that is used during gameplay
