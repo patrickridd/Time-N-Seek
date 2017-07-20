@@ -39,6 +39,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     var seekerLost = false
     var seekerWon = false
+    var isBlinking = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +78,20 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             })
         }
     }
-
+    
+    func blinkSeekButton() {
+        isBlinking = true
+        
+        while isBlinking {
+            delayWithSeconds(0.5) {
+                self.seekButton.isHidden = true
+            }
+            delayWithSeconds(0.5) {
+                self.seekButton.isHidden = false
+            }
+        }
+    }
+    
     func setButtonToSeek() {
         self.enableSeekButton()
         self.seekButton.setTitle("Seek".localized, for: .normal)
@@ -101,8 +115,8 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     func setButtonToWon() {
         self.seekButton.setTitle("Won", for: .normal)
-        self.seekButton.layer.borderColor = UIColor.green.cgColor
-        self.seekButton.setTitleColor(UIColor.green, for: .normal)
+        self.seekButton.layer.borderColor = UIColor.goGreen.cgColor
+        self.seekButton.setTitleColor(UIColor.goGreen, for: .normal)
     }
     
     func setBackButtonToReset() {
@@ -194,7 +208,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         broadcastBeacons()
        
         // Call method that makes the seekbutton blink
-
+        self.blinkSeekButton()
     }
     
     func presentSeekerLost() {
@@ -210,6 +224,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         broadcastBeacons()
         
         // Call method that makes the seekbutton blink
+        self.blinkSeekButton()
     }
     
     func presentBlueToothNotEnabled() {

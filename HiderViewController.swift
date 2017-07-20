@@ -25,6 +25,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     
     var hiderWon = false
     var hiderLost = false
+    var isBlinking = false
     
     var dataDictionary = [String: Any]()
     var distanceSetting: DistanceSetting = .feet
@@ -89,6 +90,19 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
             UIView.animate(withDuration: 1.5, animations: {
                 self.hideButton.alpha = 1.0
             })
+        }
+    }
+    
+    func blinkHideButton() {
+        isBlinking = true
+        
+        while isBlinking {
+            delayWithSeconds(0.5) {
+                self.hideButton.isHidden = true
+            }
+            delayWithSeconds(0.5) {
+                self.hideButton.isHidden = false
+            }
         }
     }
     
@@ -189,7 +203,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         setResetButton()
         
         // Blink Lost button
-        
+        self.blinkHideButton()
         
         self.statusLabel.text = "The Seeker found you. You lost!".localized
         
@@ -209,7 +223,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         setButtonToWon()
         
         // Blink Lost button
-
+        self.blinkHideButton()
         
         self.statusLabel.text = "You Won!! The seeker ran out of time".localized
         
@@ -246,6 +260,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         stopSearchingForBeacon()
         hiderWon = false
         hiderLost = false
+        isBlinking = false
         stopBroadCasting()
         setBackButton()
         resetStatusLabel()
@@ -312,7 +327,6 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     }
     
     func backOrStopButtonTapped() {
-        
         if backButton.titleLabel?.text == "Back".localized {
             closeWindow()
         } else {
