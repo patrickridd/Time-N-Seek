@@ -25,6 +25,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     
     var hiderWon = false
     var hiderLost = false
+    var gameReset = false
     
     var dataDictionary = [String: Any]()
     var distanceSetting: DistanceSetting = .feet
@@ -259,7 +260,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     func updateSatusLabels(beacons: [CLBeacon]) {
         statusLabel.isHidden = false
         guard let beacon = beacons.first else { return }
-        if hiderWon || hiderLost { return }
+        if hiderWon || hiderLost || gameReset { return }
         DispatchQueue.main.async {
             self.displayDistanceFromSeeker(distance: beacon.accuracy)
         }
@@ -276,7 +277,8 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     func resetGame() {
         stopSearchingForBeacon()
         stopBroadCasting()
-
+        
+        gameReset = true
         hiderWon = false
         hiderLost = false
         removeStatusLabelAnimation()
@@ -302,11 +304,15 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         }
         
         if distanceSetting == .feet {
-            accuracy = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance))
-            statusLabel.text = "Seeker is \(accuracy)ft away".localized
+            accuracy = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance + 1.0))
+            if accuracy > "3.0" {
+                statusLabel.text = "Seeker is \(accuracy)ft away".localized
+            }
         } else {
-            accuracy = String(format: "%.2f", distance)
-            statusLabel.text = "Seeker is \(accuracy)m away".localized
+            accuracy = String(format: "%.2f", distance + 0.3)
+            if accuracy > "1.0" {
+                statusLabel.text = "Seeker is \(accuracy)m away".localized
+            }
         }
     }
     
@@ -319,15 +325,15 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         }
         
         if distanceSetting == .feet {
-            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: seekerBeacon.accuracy))
-            if accuracyInFeet < "3.00" {
+            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: seekerBeacon.accuracy + 1.0))
+            if accuracyInFeet < "2.0" {
                 presentHiderLost()
                 return true
             }
             
         } else {
-            let accuracyInMeters = String(format: "%.2f", seekerBeacon.accuracy)
-            if accuracyInMeters < "1.00" {
+            let accuracyInMeters = String(format: "%.2f", seekerBeacon.accuracy + 0.3)
+            if accuracyInMeters < "0.70" {
                 presentHiderLost()
                 return true
             }
@@ -352,6 +358,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
 
     
     @IBAction func startButtonPressed(sender:Any){
+        gameReset = false
         setStopButton()
         setBeaconStatusToHiding()
         resetStatusLabel()
@@ -470,8 +477,11 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
             showAlert(title: "Error Connecting".localized, message: "We are having trouble signaling the device. Please try again.".localized)
             return
         }
-        peripheralManager.startAdvertising(dataDictionary)
         
+        // If the user tapped reset, stop advertising to prevent broadcasting old beacons from possible race conditions.
+        if !gameReset {
+            peripheralManager.startAdvertising(dataDictionary)
+        }
     }
     
     

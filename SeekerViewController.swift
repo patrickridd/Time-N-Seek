@@ -39,6 +39,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     var seekerLost = false
     var seekerWon = false
+    var gameReset = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -165,12 +166,14 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func displayDistance(for beacon: CLBeacon) {
         if distanceSetting == .feet {
             let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: beacon.accuracy))
-            statusLabel.text = "Hider is \(accuracyInFeet)ft away".localized
-            print("The proximity value is: \(self.metersToFeet(distanceInMeters:Double(beacon.proximity.rawValue)))\n")
-            print("The accuracy value is: \(self.metersToFeet(distanceInMeters: beacon.accuracy)))")
+            if accuracyInFeet > "3.0" {
+                statusLabel.text = "Hider is \(accuracyInFeet)ft away".localized
+            }
         } else {
             let accuracyInMeters = String(format: "%.2f",beacon.accuracy)
-            statusLabel.text = "Hider is \(accuracyInMeters)m away".localized
+            if accuracyInMeters > "1.0" {
+                self.statusLabel.text = "Hider is \(accuracyInMeters)m away".localized
+            }
         }
     }
     
@@ -331,6 +334,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
 
     func resetGame() {
+        self.gameReset = true
         stopSearchingBeacons()
         stopBroadcastingBeacon()
         instructionsLabel.isHidden = true
@@ -352,7 +356,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         statusLabel.isHidden = false
         guard let beacon = beacons.first else { self.presentCantFindBeacon(); return }
 
-        if seekerWon || seekerLost { return }
+        if seekerWon || seekerLost || gameReset { return }
 
         if elapsedTimeInSecond == self.startTime {
             startTimer()
@@ -377,14 +381,14 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         }
         
         if distanceSetting == .feet {
-            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: hiderBeacon.accuracy))
-            if accuracyInFeet < "3.00" {
+            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: hiderBeacon.accuracy + 1.0))
+            if accuracyInFeet < "2.00" {
                 presentSeekerWon()
                 return true
             }
         } else {
-            let accuracyInMeters = String(format: "%.2f", hiderBeacon.accuracy)
-            if accuracyInMeters < "1.00" {
+            let accuracyInMeters = String(format: "%.2f", hiderBeacon.accuracy + 0.3)
+            if accuracyInMeters < "0.7" {
                 presentSeekerWon()
                 return true
             }
@@ -555,7 +559,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             showAlert(title: "Error Connecting".localized, message: "We are having trouble signaling the device. Please try again.".localized)
             return
         }
-        blueToothPeripheralManager.startAdvertising(dataDictionary)
+        
+        if !gameReset {
+            blueToothPeripheralManager.startAdvertising(dataDictionary)
+        }
+    
     }
     
     // Creates a normal seeker beacon that is used during gameplay
@@ -652,6 +660,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     
     @IBAction func startButtonPressed(sender:Any){
         resetTimer()
+        gameReset = false
         startGame()
     }
     
