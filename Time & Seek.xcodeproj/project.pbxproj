@@ -15,6 +15,10 @@
 		2189A7DD1EFDC229008C80C6 /* SettingsEmbeddedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A7DC1EFDC229008C80C6 /* SettingsEmbeddedTableViewController.swift */; };
 		2189A7E11F0195DD008C80C6 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A7E01F0195DD008C80C6 /* SettingsController.swift */; };
 		2189A7E31F019649008C80C6 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A7E21F019649008C80C6 /* Settings.swift */; };
+		219D12ED1F240B1F00B5A70E /* openingGameBeep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12EC1F240B1F00B5A70E /* openingGameBeep.wav */; };
+		219D12EF1F240B8000B5A70E /* gameBegins.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12EE1F240B8000B5A70E /* gameBegins.wav */; };
+		219D12F11F240BC800B5A70E /* UserLoses.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12F01F240BC800B5A70E /* UserLoses.wav */; };
+		219D12F31F240BF800B5A70E /* gameOpeningBeep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 219D12F21F240BF800B5A70E /* gameOpeningBeep.mp3 */; };
 		21C4C32A1EDF94AC00A6FA20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C4C3291EDF94AC00A6FA20 /* AppDelegate.swift */; };
 		21C4C32F1EDF94AC00A6FA20 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21C4C32D1EDF94AC00A6FA20 /* Main.storyboard */; };
 		21C4C3311EDF94AC00A6FA20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21C4C3301EDF94AC00A6FA20 /* Assets.xcassets */; };
@@ -46,6 +50,10 @@
 		2189A7DC1EFDC229008C80C6 /* SettingsEmbeddedTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsEmbeddedTableViewController.swift; sourceTree = "<group>"; };
 		2189A7E01F0195DD008C80C6 /* SettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		2189A7E21F019649008C80C6 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		219D12EC1F240B1F00B5A70E /* openingGameBeep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = openingGameBeep.wav; path = ../../../../../Desktop/openingGameBeep.wav; sourceTree = "<group>"; };
+		219D12EE1F240B8000B5A70E /* gameBegins.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = gameBegins.wav; path = ../../../../../Desktop/gameBegins.wav; sourceTree = "<group>"; };
+		219D12F01F240BC800B5A70E /* UserLoses.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = UserLoses.wav; path = ../../../../../Desktop/UserLoses.wav; sourceTree = "<group>"; };
+		219D12F21F240BF800B5A70E /* gameOpeningBeep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = gameOpeningBeep.mp3; path = ../../../../../Desktop/gameOpeningBeep.mp3; sourceTree = "<group>"; };
 		21C4C3261EDF94AC00A6FA20 /* Time & Seek.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Time & Seek.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21C4C3291EDF94AC00A6FA20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		21C4C32E1EDF94AC00A6FA20 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -114,6 +122,17 @@
 			name = Controller;
 			sourceTree = "<group>";
 		};
+		219D12EB1F240AE900B5A70E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				219D12EE1F240B8000B5A70E /* gameBegins.wav */,
+				219D12EC1F240B1F00B5A70E /* openingGameBeep.wav */,
+				219D12F01F240BC800B5A70E /* UserLoses.wav */,
+				219D12F21F240BF800B5A70E /* gameOpeningBeep.mp3 */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		21C4C31D1EDF94AC00A6FA20 = {
 			isa = PBXGroup;
 			children = (
@@ -144,6 +163,7 @@
 				21C4C32D1EDF94AC00A6FA20 /* Main.storyboard */,
 				21C4C3301EDF94AC00A6FA20 /* Assets.xcassets */,
 				21C4C3321EDF94AC00A6FA20 /* LaunchScreen.storyboard */,
+				219D12EB1F240AE900B5A70E /* Resources */,
 				21C4C3351EDF94AC00A6FA20 /* Info.plist */,
 			);
 			path = "Time & Seek";
@@ -259,7 +279,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				21C4C3341EDF94AC00A6FA20 /* LaunchScreen.storyboard in Resources */,
+				219D12ED1F240B1F00B5A70E /* openingGameBeep.wav in Resources */,
+				219D12F11F240BC800B5A70E /* UserLoses.wav in Resources */,
+				219D12F31F240BF800B5A70E /* gameOpeningBeep.mp3 in Resources */,
 				21C4C3311EDF94AC00A6FA20 /* Assets.xcassets in Resources */,
+				219D12EF1F240B8000B5A70E /* gameBegins.wav in Resources */,
 				21C4C32F1EDF94AC00A6FA20 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

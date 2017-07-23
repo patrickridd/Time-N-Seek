@@ -234,19 +234,20 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         
         self.hiderWon = true
         
+        // If hider wins it means that the time ran out for seeker, so seeker already knows they lost.
+        // So, stop searching and broadcasting.
+        stopBroadCasting()
+        stopSearchingForBeacon()
+
         // Set Buttons to reflect that the Hider Won
         removeBlinkingHideAnimation()
         setResetButton()
         setButtonToWon()
         
         // Blink Won label
-        self.statusLabel.text = "The seeker ran out of time!".localized
+        self.statusLabel.text = "The Seeker ran out of time!".localized
         self.blinkStatusLabel()
         
-        // If hider wins it means that the time ran out for seeker, so seeker already knows they lost.
-        // So, stop searching and broadcasting.
-        stopBroadCasting()
-        stopSearchingForBeacon()
     }
 
     
@@ -289,7 +290,14 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         var accuracy = ""
         
         if hiderLost {
+            // Blink Lost Label
             statusLabel.text = "The Seeker found you!".localized
+            return
+        }
+        
+        if hiderWon {
+            // Blink Won label
+            self.statusLabel.text = "The Seeker ran out of time!".localized
             return
         }
         

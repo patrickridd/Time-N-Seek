@@ -166,6 +166,8 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         if distanceSetting == .feet {
             let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: beacon.accuracy))
             statusLabel.text = "Hider is \(accuracyInFeet)ft away".localized
+            print("The proximity value is: \(self.metersToFeet(distanceInMeters:Double(beacon.proximity.rawValue)))\n")
+            print("The accuracy value is: \(self.metersToFeet(distanceInMeters: beacon.accuracy)))")
         } else {
             let accuracyInMeters = String(format: "%.2f",beacon.accuracy)
             statusLabel.text = "Hider is \(accuracyInMeters)m away".localized
@@ -217,6 +219,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         
         self.seekerWon = true
         
+        self.stopSearchingBeacons()
         self.resetTimer()
         
         self.removeBlinkingSeekAnimation()
@@ -238,6 +241,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         
         self.seekerLost = true
         
+        self.stopSearchingBeacons()
         self.resetTimer()
         setBackButtonToReset()
         
