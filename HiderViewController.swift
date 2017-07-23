@@ -259,7 +259,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     func updateSatusLabels(beacons: [CLBeacon]) {
         statusLabel.isHidden = false
         guard let beacon = beacons.first else { return }
-        
+        if hiderWon || hiderLost { return }
         DispatchQueue.main.async {
             self.displayDistanceFromSeeker(distance: beacon.accuracy)
         }

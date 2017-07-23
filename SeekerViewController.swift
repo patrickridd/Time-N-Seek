@@ -351,6 +351,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func updateSatusLabels(beacons: [CLBeacon]) {
         statusLabel.isHidden = false
         guard let beacon = beacons.first else { self.presentCantFindBeacon(); return }
+
+        if seekerWon || seekerLost { return }
+
         if elapsedTimeInSecond == self.startTime {
             startTimer()
         }
