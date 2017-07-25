@@ -317,8 +317,10 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         self.backButton.isHidden = true
         self.statusLabel.text = self.readyOrNot[untilGameStarts]
         SoundsController.sharedController.play(sound: .openingBeep)
-        self.timer = Timer.scheduledTimer(withTimeInterval: 1.3, repeats: true, block: { (timer) in
+        self.instructionsLabel.text = "Distance caluculations fluctuate rapidly...".localized
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1.1, repeats: true, block: { (timer) in
             untilGameStarts -= 1
+            
             SoundsController.sharedController.play(sound: .openingBeep)
             self.seekButton.setTitle("\(untilGameStarts)", for: .normal)
             self.statusLabel.text = self.readyOrNot[untilGameStarts]
@@ -332,7 +334,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
                 self.backButton.isHidden = false
                 self.setButtonToSeeking()
                 self.delayWithSeconds(2, completion: {
-                    self.instructionsLabel.text = "WARNING: Distance fluctuates rapidly...".localized
                     self.statusLabel.text = "Locating Hider's Position...".localized
                     self.broadcastBeacons()
                     self.discoverBeacons()
