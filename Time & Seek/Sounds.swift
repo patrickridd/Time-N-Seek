@@ -11,6 +11,7 @@ import Foundation
 enum Sound: String {
     case openingBeep
     case userLost
+    case gameLoads
     case userWon
     case gameBegins
     case userTap

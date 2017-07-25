@@ -21,10 +21,20 @@ class TimedNSeekHomeViewController: UIViewController, CBPeripheralManagerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         updateButtons()
-        
+        loadAnimation()
         peripheralManager = CBPeripheralManager(delegate: self as CBPeripheralManagerDelegate, queue: nil, options: nil)
     }
+    
+    func loadAnimation() {
+        hiderButton.alpha = 0
+        seekerButton.alpha = 0
+        UIView.animate(withDuration: 1.0, animations: {
+            self.hiderButton.alpha = 1.0
+            self.seekerButton.alpha = 1.0
+            SoundsController.sharedController.play(sound: .gameLoads)
+        })
 
+    }
     func updateButtons() {
         hiderButton.layer.borderColor = UIColor.myBlue.cgColor
         seekerButton.layer.borderColor = UIColor.myBlue.cgColor
