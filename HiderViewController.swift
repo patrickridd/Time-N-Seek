@@ -25,6 +25,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     
     var hiderWon = false
     var hiderLost = false
+    var shouldBroadcastGameResult = false
     var gameReset = false
     
     var dataDictionary = [String: Any]()
@@ -225,7 +226,11 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         self.blinkStatusLabel()
         
         // Broadcast appropriate beacon
-        self.broadcastBeacon()
+        if shouldBroadcastGameResult {
+            self.broadcastBeacon()
+        } else {
+            self.stopBroadCasting()
+        }
     }
     
     func presentHiderWon() {
@@ -275,12 +280,15 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     }
     
     func resetGame() {
-        stopSearchingForBeacon()
-        stopBroadCasting()
-        
+        shouldBroadcastGameResult = false
         gameReset = true
         hiderWon = false
         hiderLost = false
+        
+        stopSearchingForBeacon()
+        stopBroadCasting()
+        
+        
         removeStatusLabelAnimation()
         removeBlinkingHideAnimation()
         resetStatusLabel()
@@ -304,15 +312,11 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         }
         
         if distanceSetting == .feet {
-            accuracy = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance + 1.0))
-            if accuracy > "3.0" {
-                statusLabel.text = "Seeker is \(accuracy)ft away".localized
-            }
+            accuracy = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance))
+            statusLabel.text = "Seeker is \(accuracy)ft away".localized
         } else {
-            accuracy = String(format: "%.2f", distance + 0.3)
-            if accuracy > "1.0" {
-                statusLabel.text = "Seeker is \(accuracy)m away".localized
-            }
+            accuracy = String(format: "%.2f", distance)
+            statusLabel.text = "Seeker is \(accuracy)m away".localized
         }
     }
     
@@ -320,20 +324,25 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         print(seekerBeacon.major)
         if seekerBeacon.major == 777 {
             print("777 Seeker Won, Hider Lost")
+            shouldBroadcastGameResult = false
             presentHiderLost()
             return true
         }
         
         if distanceSetting == .feet {
-            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: seekerBeacon.accuracy + 1.0))
-            if accuracyInFeet < "2.0" {
+            let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: seekerBeacon.accuracy))
+            if accuracyInFeet < "1.0" {
+                print("Within distance: \(accuracyInFeet)")
+                shouldBroadcastGameResult = true
                 presentHiderLost()
                 return true
             }
             
         } else {
-            let accuracyInMeters = String(format: "%.2f", seekerBeacon.accuracy + 0.3)
-            if accuracyInMeters < "0.70" {
+            let accuracyInMeters = String(format: "%.2f", seekerBeacon.accuracy)
+            if accuracyInMeters < "0.3" {
+                print("Within distance: \(accuracyInMeters)")
+                shouldBroadcastGameResult = true
                 presentHiderLost()
                 return true
             }
@@ -344,6 +353,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     func determineIfHiderWon(seekerBeacon: CLBeacon) -> Bool {
         if seekerBeacon.major == 666 {
             print("666 Seeker ran out of time, Hider Won")
+            shouldBroadcastGameResult = false
             presentHiderWon()
             return true
         }
@@ -479,9 +489,9 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         }
         
         // If the user tapped reset, stop advertising to prevent broadcasting old beacons from possible race conditions.
-        if !gameReset {
+       // if !gameReset {
             peripheralManager.startAdvertising(dataDictionary)
-        }
+       // }
     }
     
     
