@@ -211,6 +211,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     func presentHiderLost() {
         
         // Set ring tone and vibrate for Hider Losing
+        SoundsController.sharedController.play(sound: .userLost)
         vibrate()
         
         self.hiderLost = true
@@ -236,6 +237,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     func presentHiderWon() {
        
         //set ring tone and vibrate for Hider Winning
+        SoundsController.sharedController.play(sound: .userWon)
         vibrate()
         
         self.hiderWon = true
@@ -369,6 +371,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     
     @IBAction func startButtonPressed(sender:Any){
         gameReset = false
+        SoundsController.sharedController.play(sound: .gameBegins)
         setStopButton()
         setBeaconStatusToHiding()
         resetStatusLabel()
@@ -385,6 +388,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
     }
     
     func stopResetGameButtonPressed() {
+        SoundsController.sharedController.play(sound: .userTap)
         resetGame()
     }
     

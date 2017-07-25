@@ -15,10 +15,13 @@
 		2189A7DD1EFDC229008C80C6 /* SettingsEmbeddedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A7DC1EFDC229008C80C6 /* SettingsEmbeddedTableViewController.swift */; };
 		2189A7E11F0195DD008C80C6 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A7E01F0195DD008C80C6 /* SettingsController.swift */; };
 		2189A7E31F019649008C80C6 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A7E21F019649008C80C6 /* Settings.swift */; };
-		219D12ED1F240B1F00B5A70E /* openingGameBeep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12EC1F240B1F00B5A70E /* openingGameBeep.wav */; };
+		219D12ED1F240B1F00B5A70E /* userTap.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12EC1F240B1F00B5A70E /* userTap.wav */; };
 		219D12EF1F240B8000B5A70E /* gameBegins.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12EE1F240B8000B5A70E /* gameBegins.wav */; };
-		219D12F11F240BC800B5A70E /* UserLoses.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12F01F240BC800B5A70E /* UserLoses.wav */; };
-		219D12F31F240BF800B5A70E /* gameOpeningBeep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 219D12F21F240BF800B5A70E /* gameOpeningBeep.mp3 */; };
+		219D12F11F240BC800B5A70E /* userLost.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12F01F240BC800B5A70E /* userLost.wav */; };
+		219D12F71F27EE9C00B5A70E /* SoundsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219D12F61F27EE9C00B5A70E /* SoundsController.swift */; };
+		219D12F91F27EEAD00B5A70E /* Sounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219D12F81F27EEAD00B5A70E /* Sounds.swift */; };
+		219D12FB1F27F0A900B5A70E /* userWon.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12FA1F27F0A900B5A70E /* userWon.wav */; };
+		219D12FD1F27F54B00B5A70E /* openingBeep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12FC1F27F54B00B5A70E /* openingBeep.wav */; };
 		21C4C32A1EDF94AC00A6FA20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C4C3291EDF94AC00A6FA20 /* AppDelegate.swift */; };
 		21C4C32F1EDF94AC00A6FA20 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21C4C32D1EDF94AC00A6FA20 /* Main.storyboard */; };
 		21C4C3311EDF94AC00A6FA20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21C4C3301EDF94AC00A6FA20 /* Assets.xcassets */; };
@@ -50,10 +53,13 @@
 		2189A7DC1EFDC229008C80C6 /* SettingsEmbeddedTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsEmbeddedTableViewController.swift; sourceTree = "<group>"; };
 		2189A7E01F0195DD008C80C6 /* SettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		2189A7E21F019649008C80C6 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
-		219D12EC1F240B1F00B5A70E /* openingGameBeep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = openingGameBeep.wav; path = ../../../../../Desktop/openingGameBeep.wav; sourceTree = "<group>"; };
+		219D12EC1F240B1F00B5A70E /* userTap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = userTap.wav; path = ../../../../../Desktop/userTap.wav; sourceTree = "<group>"; };
 		219D12EE1F240B8000B5A70E /* gameBegins.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = gameBegins.wav; path = ../../../../../Desktop/gameBegins.wav; sourceTree = "<group>"; };
-		219D12F01F240BC800B5A70E /* UserLoses.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = UserLoses.wav; path = ../../../../../Desktop/UserLoses.wav; sourceTree = "<group>"; };
-		219D12F21F240BF800B5A70E /* gameOpeningBeep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = gameOpeningBeep.mp3; path = ../../../../../Desktop/gameOpeningBeep.mp3; sourceTree = "<group>"; };
+		219D12F01F240BC800B5A70E /* userLost.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = userLost.wav; path = ../../../../../Desktop/userLost.wav; sourceTree = "<group>"; };
+		219D12F61F27EE9C00B5A70E /* SoundsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundsController.swift; sourceTree = "<group>"; };
+		219D12F81F27EEAD00B5A70E /* Sounds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sounds.swift; sourceTree = "<group>"; };
+		219D12FA1F27F0A900B5A70E /* userWon.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = userWon.wav; path = ../../../../../Desktop/userWon.wav; sourceTree = "<group>"; };
+		219D12FC1F27F54B00B5A70E /* openingBeep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = openingBeep.wav; path = ../../../../../Desktop/openingBeep.wav; sourceTree = "<group>"; };
 		21C4C3261EDF94AC00A6FA20 /* Time & Seek.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Time & Seek.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21C4C3291EDF94AC00A6FA20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		21C4C32E1EDF94AC00A6FA20 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -110,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				2189A7E21F019649008C80C6 /* Settings.swift */,
+				219D12F81F27EEAD00B5A70E /* Sounds.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -118,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				2189A7E01F0195DD008C80C6 /* SettingsController.swift */,
+				219D12F61F27EE9C00B5A70E /* SoundsController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -126,9 +134,10 @@
 			isa = PBXGroup;
 			children = (
 				219D12EE1F240B8000B5A70E /* gameBegins.wav */,
-				219D12EC1F240B1F00B5A70E /* openingGameBeep.wav */,
-				219D12F01F240BC800B5A70E /* UserLoses.wav */,
-				219D12F21F240BF800B5A70E /* gameOpeningBeep.mp3 */,
+				219D12EC1F240B1F00B5A70E /* userTap.wav */,
+				219D12FC1F27F54B00B5A70E /* openingBeep.wav */,
+				219D12F01F240BC800B5A70E /* userLost.wav */,
+				219D12FA1F27F0A900B5A70E /* userWon.wav */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -279,9 +288,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				21C4C3341EDF94AC00A6FA20 /* LaunchScreen.storyboard in Resources */,
-				219D12ED1F240B1F00B5A70E /* openingGameBeep.wav in Resources */,
-				219D12F11F240BC800B5A70E /* UserLoses.wav in Resources */,
-				219D12F31F240BF800B5A70E /* gameOpeningBeep.mp3 in Resources */,
+				219D12ED1F240B1F00B5A70E /* userTap.wav in Resources */,
+				219D12FB1F27F0A900B5A70E /* userWon.wav in Resources */,
+				219D12F11F240BC800B5A70E /* userLost.wav in Resources */,
+				219D12FD1F27F54B00B5A70E /* openingBeep.wav in Resources */,
 				21C4C3311EDF94AC00A6FA20 /* Assets.xcassets in Resources */,
 				219D12EF1F240B8000B5A70E /* gameBegins.wav in Resources */,
 				21C4C32F1EDF94AC00A6FA20 /* Main.storyboard in Resources */,
@@ -303,7 +313,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2189A7D21EFAF53F008C80C6 /* String+Extension.swift in Sources */,
+				219D12F71F27EE9C00B5A70E /* SoundsController.swift in Sources */,
 				2189A7E11F0195DD008C80C6 /* SettingsController.swift in Sources */,
+				219D12F91F27EEAD00B5A70E /* Sounds.swift in Sources */,
 				21294BA11EF86271001C81BD /* UIColor+Extension.swift in Sources */,
 				2189A7DB1EFDBB8C008C80C6 /* SettingsViewController.swift in Sources */,
 				2189A7E31F019649008C80C6 /* Settings.swift in Sources */,

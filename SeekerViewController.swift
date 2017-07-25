@@ -213,9 +213,11 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
     
     func presentSeekerWon() {
-        vibrate()
+
         //play tone to reflect seeker won
-        
+        SoundsController.sharedController.play(sound: .userWon)
+        vibrate()
+
         self.seekerWon = true
         
         self.stopSearchingBeacons()
@@ -239,8 +241,10 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
     
     func presentSeekerLost() {
-        vibrate()
+        
         // Play tone to reflect seeker lost
+        SoundsController.sharedController.play(sound: .userLost)
+        vibrate()
         
         self.seekerLost = true
         
@@ -312,9 +316,10 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         self.statusLabel.alpha = 1.0
         self.backButton.isHidden = true
         self.statusLabel.text = self.readyOrNot[untilGameStarts]
-        
+        SoundsController.sharedController.play(sound: .openingBeep)
         self.timer = Timer.scheduledTimer(withTimeInterval: 1.3, repeats: true, block: { (timer) in
             untilGameStarts -= 1
+            SoundsController.sharedController.play(sound: .openingBeep)
             self.seekButton.setTitle("\(untilGameStarts)", for: .normal)
             self.statusLabel.text = self.readyOrNot[untilGameStarts]
             
@@ -688,6 +693,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
                 presenter.dismiss(animated: true, completion: nil)
             }
         } else {
+            SoundsController.sharedController.play(sound: .userTap)
             resetGame()
         }
     }

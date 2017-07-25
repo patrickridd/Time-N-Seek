@@ -147,11 +147,7 @@
                                 </state>
                             </button>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PQF-76-NYR" userLabel="statusLabel" customClass="LocalizedLabel" customModule="Time___Seek" customModuleProvider="target">
-                                <rect key="frame" x="62.5" y="213.5" width="250" height="0.0"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="250" id="ciH-yJ-2rn"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="hX6-tm-Ugj"/>
-                                </constraints>
+                                <rect key="frame" x="20" y="213.5" width="335" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="26"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -171,11 +167,13 @@
                             <constraint firstItem="FaY-Rm-6xC" firstAttribute="top" secondItem="PQF-76-NYR" secondAttribute="bottom" constant="20" id="7aO-Fg-2FB"/>
                             <constraint firstItem="FaY-Rm-6xC" firstAttribute="centerX" relation="lessThanOrEqual" secondItem="oUM-y0-0WX" secondAttribute="centerX" id="99C-JZ-fxn"/>
                             <constraint firstAttribute="trailingMargin" secondItem="T43-a8-cec" secondAttribute="trailing" constant="20" id="CDZ-21-T5k"/>
+                            <constraint firstItem="PQF-76-NYR" firstAttribute="leading" secondItem="XoR-HF-czo" secondAttribute="leading" constant="20" id="CJU-7S-gB0"/>
                             <constraint firstItem="T43-a8-cec" firstAttribute="centerY" secondItem="XoR-HF-czo" secondAttribute="centerY" id="DXs-FT-6kA"/>
                             <constraint firstAttribute="bottom" secondItem="oUM-y0-0WX" secondAttribute="bottom" constant="20" symbolic="YES" id="JcH-CV-XFy"/>
                             <constraint firstItem="92v-UJ-Hv8" firstAttribute="top" secondItem="Gxt-cT-UGd" secondAttribute="bottom" constant="30" id="P5N-In-7oz"/>
                             <constraint firstItem="FaY-Rm-6xC" firstAttribute="centerX" secondItem="XoR-HF-czo" secondAttribute="centerX" id="PGd-xl-1ZD"/>
                             <constraint firstItem="92v-UJ-Hv8" firstAttribute="leading" secondItem="XoR-HF-czo" secondAttribute="leadingMargin" id="RVo-Xk-Ruy"/>
+                            <constraint firstAttribute="trailing" secondItem="PQF-76-NYR" secondAttribute="trailing" constant="20" id="V7F-CI-OBD"/>
                             <constraint firstItem="92v-UJ-Hv8" firstAttribute="trailing" secondItem="XoR-HF-czo" secondAttribute="trailingMargin" id="WVE-Ns-cQx"/>
                             <constraint firstItem="T43-a8-cec" firstAttribute="leading" secondItem="XoR-HF-czo" secondAttribute="leadingMargin" constant="20" id="hMH-Nf-I83"/>
                             <constraint firstItem="oUM-y0-0WX" firstAttribute="centerX" secondItem="FaY-Rm-6xC" secondAttribute="centerX" id="lUb-iq-s91"/>
