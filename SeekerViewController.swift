@@ -382,7 +382,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         
         if hiderBeacon.major == 666 {
             shouldBroadcastResult = false
-            self.instructionsLabel.text = "Hider Broacasted they lost"
+            self.instructionsLabel.text = "Hider Broacasted they lost".localized
             presentSeekerWon()
             return true
         }
@@ -390,7 +390,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         if distanceSetting == .feet {
             let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: hiderBeacon.accuracy))
             if accuracyInFeet < "1.00" {
-                self.instructionsLabel.text = "Within distance: \(accuracyInFeet)ft"
+                self.instructionsLabel.text = "Within distance: \(accuracyInFeet)ft".localized
                 shouldBroadcastResult = true
                 presentSeekerWon()
                 return true
@@ -398,7 +398,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         } else {
             let accuracyInMeters = String(format: "%.2f", hiderBeacon.accuracy)
             if accuracyInMeters < "0.3" {
-                instructionsLabel.text = "Within distance: \(accuracyInMeters)m"
+                instructionsLabel.text = "Within distance: \(accuracyInMeters)m".localized
                 shouldBroadcastResult = true
                 presentSeekerWon()
                 return true
