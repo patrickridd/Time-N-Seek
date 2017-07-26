@@ -20,9 +20,19 @@
 		219D12F11F240BC800B5A70E /* userLost.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12F01F240BC800B5A70E /* userLost.wav */; };
 		219D12F71F27EE9C00B5A70E /* SoundsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219D12F61F27EE9C00B5A70E /* SoundsController.swift */; };
 		219D12F91F27EEAD00B5A70E /* Sounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219D12F81F27EEAD00B5A70E /* Sounds.swift */; };
-		219D12FB1F27F0A900B5A70E /* gameLoads.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12FA1F27F0A900B5A70E /* gameLoads.wav */; };
+		219D12FB1F27F0A900B5A70E /* selectsPlayer.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12FA1F27F0A900B5A70E /* selectsPlayer.wav */; };
 		219D12FD1F27F54B00B5A70E /* openingBeep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12FC1F27F54B00B5A70E /* openingBeep.wav */; };
 		219D12FF1F28040600B5A70E /* userWon.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D12FE1F28040600B5A70E /* userWon.wav */; };
+		219D13011F28492A00B5A70E /* gameLoaded.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D13001F28492A00B5A70E /* gameLoaded.wav */; };
+		219D13031F284A9E00B5A70E /* accessDenied.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D13021F284A9E00B5A70E /* accessDenied.wav */; };
+		219D13051F284E6800B5A70E /* changeSetting.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D13041F284E6800B5A70E /* changeSetting.wav */; };
+		219D13071F28573700B5A70E /* loadsBarCode.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D13061F28573700B5A70E /* loadsBarCode.wav */; };
+		219D130B1F291B1F00B5A70E /* barCodeScanned.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D130A1F291B1F00B5A70E /* barCodeScanned.wav */; };
+		219D130D1F291D5200B5A70E /* closeWindow.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D130C1F291D5200B5A70E /* closeWindow.wav */; };
+		219D130F1F291EDA00B5A70E /* backButtonTap.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D130E1F291EDA00B5A70E /* backButtonTap.wav */; };
+		219D13111F2926DF00B5A70E /* barCodeLoaded.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D13101F2926DF00B5A70E /* barCodeLoaded.wav */; };
+		219D13131F292A3600B5A70E /* loadBarCode.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D13121F292A3600B5A70E /* loadBarCode.wav */; };
+		219D13151F292A6600B5A70E /* runningOutOfTime.wav in Resources */ = {isa = PBXBuildFile; fileRef = 219D13141F292A6600B5A70E /* runningOutOfTime.wav */; };
 		21C4C32A1EDF94AC00A6FA20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C4C3291EDF94AC00A6FA20 /* AppDelegate.swift */; };
 		21C4C32F1EDF94AC00A6FA20 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21C4C32D1EDF94AC00A6FA20 /* Main.storyboard */; };
 		21C4C3311EDF94AC00A6FA20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21C4C3301EDF94AC00A6FA20 /* Assets.xcassets */; };
@@ -59,9 +69,19 @@
 		219D12F01F240BC800B5A70E /* userLost.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = userLost.wav; path = ../../../../../Desktop/userLost.wav; sourceTree = "<group>"; };
 		219D12F61F27EE9C00B5A70E /* SoundsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundsController.swift; sourceTree = "<group>"; };
 		219D12F81F27EEAD00B5A70E /* Sounds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sounds.swift; sourceTree = "<group>"; };
-		219D12FA1F27F0A900B5A70E /* gameLoads.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = gameLoads.wav; path = ../../../../../Desktop/gameLoads.wav; sourceTree = "<group>"; };
+		219D12FA1F27F0A900B5A70E /* selectsPlayer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = selectsPlayer.wav; path = ../../../../../Desktop/selectsPlayer.wav; sourceTree = "<group>"; };
 		219D12FC1F27F54B00B5A70E /* openingBeep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = openingBeep.wav; path = ../../../../../Desktop/openingBeep.wav; sourceTree = "<group>"; };
 		219D12FE1F28040600B5A70E /* userWon.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = userWon.wav; path = ../../../../../Desktop/userWon.wav; sourceTree = "<group>"; };
+		219D13001F28492A00B5A70E /* gameLoaded.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = gameLoaded.wav; path = ../../../../../Desktop/gameLoaded.wav; sourceTree = "<group>"; };
+		219D13021F284A9E00B5A70E /* accessDenied.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = accessDenied.wav; path = ../../../../../Desktop/accessDenied.wav; sourceTree = "<group>"; };
+		219D13041F284E6800B5A70E /* changeSetting.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = changeSetting.wav; path = ../../../../../Desktop/changeSetting.wav; sourceTree = "<group>"; };
+		219D13061F28573700B5A70E /* loadsBarCode.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = loadsBarCode.wav; path = ../../../../../Desktop/loadsBarCode.wav; sourceTree = "<group>"; };
+		219D130A1F291B1F00B5A70E /* barCodeScanned.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = barCodeScanned.wav; path = ../../../../../Desktop/barCodeScanned.wav; sourceTree = "<group>"; };
+		219D130C1F291D5200B5A70E /* closeWindow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = closeWindow.wav; path = ../../../../../Desktop/closeWindow.wav; sourceTree = "<group>"; };
+		219D130E1F291EDA00B5A70E /* backButtonTap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = backButtonTap.wav; path = ../../../../../Desktop/backButtonTap.wav; sourceTree = "<group>"; };
+		219D13101F2926DF00B5A70E /* barCodeLoaded.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = barCodeLoaded.wav; path = ../../../../../Desktop/barCodeLoaded.wav; sourceTree = "<group>"; };
+		219D13121F292A3600B5A70E /* loadBarCode.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = loadBarCode.wav; path = ../../../../../Desktop/loadBarCode.wav; sourceTree = "<group>"; };
+		219D13141F292A6600B5A70E /* runningOutOfTime.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = runningOutOfTime.wav; path = ../../../../../Desktop/runningOutOfTime.wav; sourceTree = "<group>"; };
 		21C4C3261EDF94AC00A6FA20 /* Time & Seek.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Time & Seek.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21C4C3291EDF94AC00A6FA20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		21C4C32E1EDF94AC00A6FA20 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -137,10 +157,20 @@
 			children = (
 				219D12EE1F240B8000B5A70E /* gameBegins.wav */,
 				219D12EC1F240B1F00B5A70E /* userTap.wav */,
+				219D13141F292A6600B5A70E /* runningOutOfTime.wav */,
 				219D12FC1F27F54B00B5A70E /* openingBeep.wav */,
+				219D130C1F291D5200B5A70E /* closeWindow.wav */,
+				219D13121F292A3600B5A70E /* loadBarCode.wav */,
+				219D13101F2926DF00B5A70E /* barCodeLoaded.wav */,
+				219D13001F28492A00B5A70E /* gameLoaded.wav */,
 				219D12F01F240BC800B5A70E /* userLost.wav */,
+				219D130A1F291B1F00B5A70E /* barCodeScanned.wav */,
+				219D13061F28573700B5A70E /* loadsBarCode.wav */,
+				219D130E1F291EDA00B5A70E /* backButtonTap.wav */,
 				219D12FE1F28040600B5A70E /* userWon.wav */,
-				219D12FA1F27F0A900B5A70E /* gameLoads.wav */,
+				219D13021F284A9E00B5A70E /* accessDenied.wav */,
+				219D13041F284E6800B5A70E /* changeSetting.wav */,
+				219D12FA1F27F0A900B5A70E /* selectsPlayer.wav */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -174,8 +204,8 @@
 				21C4C34F1EDF97C000A6FA20 /* ViewControllers */,
 				21C4C32D1EDF94AC00A6FA20 /* Main.storyboard */,
 				21C4C3301EDF94AC00A6FA20 /* Assets.xcassets */,
-				21C4C3321EDF94AC00A6FA20 /* LaunchScreen.storyboard */,
 				219D12EB1F240AE900B5A70E /* Resources */,
+				21C4C3321EDF94AC00A6FA20 /* LaunchScreen.storyboard */,
 				21C4C3351EDF94AC00A6FA20 /* Info.plist */,
 			);
 			path = "Time & Seek";
@@ -292,13 +322,23 @@
 			files = (
 				21C4C3341EDF94AC00A6FA20 /* LaunchScreen.storyboard in Resources */,
 				219D12ED1F240B1F00B5A70E /* userTap.wav in Resources */,
-				219D12FB1F27F0A900B5A70E /* gameLoads.wav in Resources */,
+				219D13011F28492A00B5A70E /* gameLoaded.wav in Resources */,
+				219D12FB1F27F0A900B5A70E /* selectsPlayer.wav in Resources */,
 				219D12F11F240BC800B5A70E /* userLost.wav in Resources */,
+				219D13051F284E6800B5A70E /* changeSetting.wav in Resources */,
+				219D130B1F291B1F00B5A70E /* barCodeScanned.wav in Resources */,
 				219D12FD1F27F54B00B5A70E /* openingBeep.wav in Resources */,
+				219D130D1F291D5200B5A70E /* closeWindow.wav in Resources */,
+				219D13111F2926DF00B5A70E /* barCodeLoaded.wav in Resources */,
 				21C4C3311EDF94AC00A6FA20 /* Assets.xcassets in Resources */,
 				219D12FF1F28040600B5A70E /* userWon.wav in Resources */,
+				219D13151F292A6600B5A70E /* runningOutOfTime.wav in Resources */,
 				219D12EF1F240B8000B5A70E /* gameBegins.wav in Resources */,
+				219D13031F284A9E00B5A70E /* accessDenied.wav in Resources */,
+				219D13131F292A3600B5A70E /* loadBarCode.wav in Resources */,
+				219D130F1F291EDA00B5A70E /* backButtonTap.wav in Resources */,
 				21C4C32F1EDF94AC00A6FA20 /* Main.storyboard in Resources */,
+				219D13071F28573700B5A70E /* loadsBarCode.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

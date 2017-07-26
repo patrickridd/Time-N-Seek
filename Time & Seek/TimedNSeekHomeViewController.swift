@@ -31,7 +31,7 @@ class TimedNSeekHomeViewController: UIViewController, CBPeripheralManagerDelegat
         UIView.animate(withDuration: 1.0, animations: {
             self.hiderButton.alpha = 1.0
             self.seekerButton.alpha = 1.0
-            SoundsController.sharedController.play(sound: .gameLoads)
+            SoundsController.sharedController.play(sound: .gameLoaded)
         })
 
     }
@@ -50,23 +50,27 @@ class TimedNSeekHomeViewController: UIViewController, CBPeripheralManagerDelegat
     // MARK: Button Actions
     
     func didTapSeekerButton() {
+        SoundsController.sharedController.play(sound: .selectsPlayer)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let seekerVC = storyboard.instantiateViewController(withIdentifier: "seekerQRReaderVC")
         self.present(seekerVC, animated: true, completion: nil)
     }
     
     func didTapHiderButton() {
+        SoundsController.sharedController.play(sound: .selectsPlayer)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let hiderVC = storyboard.instantiateViewController(withIdentifier: "hiderQRCodeVC")
         self.present(hiderVC, animated: true, completion: nil)
     }
     
     func didTapBluetoothButton() {
+        SoundsController.sharedController.play(sound: .userTap)
         guard let url = URL(string: "App-Prefs:root=Bluetooth") else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
     
     func didTapSettings() {
+        SoundsController.sharedController.play(sound: .userTap)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let hiderVC = storyboard.instantiateViewController(withIdentifier: "settingsViewController")
         self.present(hiderVC, animated: true, completion: nil)

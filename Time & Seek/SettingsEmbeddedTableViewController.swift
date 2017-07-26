@@ -102,8 +102,9 @@ class SettingsEmbeddedTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            saveSetting(inSection: indexPath.section, forRow: indexPath.row)
-            setupSettings()
+        SoundsController.sharedController.play(sound: .changeSetting)
+        saveSetting(inSection: indexPath.section, forRow: indexPath.row)
+        setupSettings()
     }
     
 }

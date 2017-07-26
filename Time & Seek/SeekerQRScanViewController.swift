@@ -28,7 +28,7 @@ class SeekerQRScanViewController: UIViewController, AVCaptureMetadataOutputObjec
         super.viewDidLoad()
         AppUtility.lockOrientation(.portrait)
         nextButton.setTitleColor(UIColor.gray, for: .normal)
-        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
         
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         backButton.setTitleColor(UIColor.geraldine, for: .normal)
@@ -39,17 +39,28 @@ class SeekerQRScanViewController: UIViewController, AVCaptureMetadataOutputObjec
         super.viewWillAppear(animated)
         setupQRReader()
     }
-    
+    func nextTapped() {
+        guard let _ = self.uuid else {
+            SoundsController.sharedController.play(sound: .accessDenied)
+            return
+        }
+        
+        SoundsController.sharedController.play(sound: .userTap)
+        nextButtonTapped()
+    }
     func nextButtonTapped() {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        guard let seekerVC = storyBoard.instantiateViewController(withIdentifier: "seekerVC") as? SeekerViewController else { return }
-        
-        seekerVC.uuid = self.uuid
+        guard let seekerVC = storyBoard.instantiateViewController(withIdentifier: "seekerVC") as? SeekerViewController else {
+            SoundsController.sharedController.play(sound: .accessDenied)
+            return
+        }
+        seekerVC.uuid = uuid
         seekerVC.modalPresentationStyle = UIModalPresentationStyle.fullScreen;
         self.present(seekerVC, animated: true, completion: nil)
     }
     
     func backButtonTapped() {
+        SoundsController.sharedController.play(sound: .userTap)
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -130,6 +141,11 @@ class SeekerQRScanViewController: UIViewController, AVCaptureMetadataOutputObjec
                 uuidTextField.text = metadataObj.stringValue
                 uuidTextField.textColor = UIColor.myBlue
                 nextButton.setTitleColor(UIColor.myBlue, for: .normal)
+                guard let _ = self.uuid else {
+                    SoundsController.sharedController.play(sound: .accessDenied)
+                    return
+                }
+                SoundsController.sharedController.play(sound: .loadBarCode)
                 nextButtonTapped()
                 nextButton.isEnabled = true
             }

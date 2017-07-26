@@ -16,7 +16,7 @@ class HiderQRCodeViewController: UIViewController {
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     
-    var qrcodeImage: CIImage!
+    var qrcodeImage: CIImage?
     let uuid = UUID().uuidString
 
     override func viewDidLoad() {
@@ -54,6 +54,7 @@ class HiderQRCodeViewController: UIViewController {
 
     
     func nextButtonTapped() {
+        SoundsController.sharedController.play(sound: .userTap)
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         guard let hiderVC = storyBoard.instantiateViewController(withIdentifier: "hiderVC") as? HiderViewController else { return }
         hiderVC.uuid = self.uuid
@@ -62,6 +63,7 @@ class HiderQRCodeViewController: UIViewController {
     }
     
     func backButtonTapped() {
+        SoundsController.sharedController.play(sound: .userTap)
         self.dismiss(animated: true, completion: nil)
     }
    

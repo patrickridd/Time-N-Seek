@@ -23,9 +23,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>We need access to your camera to scan the Hiders Beacon UUID</string>
+	<string>We need access to your camera to scan the Hiders Beacon ID</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Needs permission to help you locate the Hider</string>
+	<string>Needs permission to calculate distance between players</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

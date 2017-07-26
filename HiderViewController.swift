@@ -383,17 +383,18 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         if backButton.titleLabel?.text == "Back".localized {
             closeWindow()
         } else {
+            SoundsController.sharedController.play(sound: .changeSetting)
             stopResetGameButtonPressed()
         }
     }
     
     func stopResetGameButtonPressed() {
-        SoundsController.sharedController.play(sound: .userTap)
         resetGame()
     }
     
     func closeWindow() {
         if let presenter = self.presentingViewController{
+            SoundsController.sharedController.play(sound: .userTap)
             presenter.dismiss(animated: true, completion: nil)
         }
     }

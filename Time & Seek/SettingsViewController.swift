@@ -20,6 +20,7 @@ class SettingsViewController: UIViewController {
     }
     
     func didTapCloseButton() {
+        SoundsController.sharedController.play(sound: .closeWindow)
         self.dismiss(animated: true, completion: nil)
     }
     
