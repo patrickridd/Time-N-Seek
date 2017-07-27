@@ -145,7 +145,7 @@ class SeekerQRScanViewController: UIViewController, AVCaptureMetadataOutputObjec
                     SoundsController.sharedController.play(sound: .accessDenied)
                     return
                 }
-                SoundsController.sharedController.play(sound: .loadBarCode)
+                SoundsController.sharedController.play(sound: .userTap)
                 nextButtonTapped()
                 nextButton.isEnabled = true
             }

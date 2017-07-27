@@ -315,10 +315,10 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
         
         if distanceSetting == .feet {
             accuracy = String(format: "%.2f", self.metersToFeet(distanceInMeters: distance))
-            statusLabel.text = "Seeker is \(accuracy)ft away".localized
+            statusLabel.text = "Seeker is \(accuracy) ft away".localized
         } else {
             accuracy = String(format: "%.2f", distance)
-            statusLabel.text = "Seeker is \(accuracy)m away".localized
+            statusLabel.text = "Seeker is \(accuracy) m away".localized
         }
     }
     
@@ -611,7 +611,7 @@ class HiderViewController: UIViewController, CBPeripheralManagerDelegate, CLLoca
             locationManager.stopRangingBeacons(in: region)
         } else {
             delayWithSeconds(3, completion: {
-                self.statusLabel.text = "Trying to locate Seeker's distance...".localized
+                self.statusLabel.text = "Locating Seeker distance...".localized
             })
         }
     }

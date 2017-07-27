@@ -307,9 +307,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time &amp; Seek" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g1U-Lq-mEU" customClass="LocalizedLabel" customModule="Time___Seek" customModuleProvider="target">
-                                <rect key="frame" x="110.5" y="50" width="154" height="34"/>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="28"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g1U-Lq-mEU" customClass="LocalizedLabel" customModule="Time___Seek" customModuleProvider="target">
+                                <rect key="frame" x="99" y="60" width="75" height="42"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="35"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -362,18 +362,36 @@
                                     <color key="titleColor" red="0.1960784314" green="0.59999999999999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconTransparent" translatesAutoresizingMaskIntoConstraints="NO" id="639-OQ-IJG">
+                                <rect key="frame" x="175" y="69" width="25" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="25" id="1q8-Px-dBp"/>
+                                    <constraint firstAttribute="height" constant="25" id="w7e-Su-A4H"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Seek" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fli-aZ-CgL" customClass="LocalizedLabel" customModule="Time___Seek" customModuleProvider="target">
+                                <rect key="frame" x="204" y="60" width="76" height="42.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="35"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="g1U-Lq-mEU" firstAttribute="centerX" secondItem="HfM-NY-bdW" secondAttribute="centerX" id="8C7-aw-tPe"/>
-                            <constraint firstItem="g1U-Lq-mEU" firstAttribute="top" secondItem="qRk-J7-DUb" secondAttribute="bottom" constant="30" id="BON-Se-PeO"/>
+                            <constraint firstItem="g1U-Lq-mEU" firstAttribute="top" secondItem="qRk-J7-DUb" secondAttribute="bottom" constant="40" id="BON-Se-PeO"/>
                             <constraint firstItem="xeY-bf-V4v" firstAttribute="centerY" secondItem="HfM-NY-bdW" secondAttribute="centerY" constant="40" id="CXh-QY-1WO"/>
+                            <constraint firstItem="639-OQ-IJG" firstAttribute="centerY" secondItem="g1U-Lq-mEU" secondAttribute="centerY" id="Fdi-nk-7F0"/>
+                            <constraint firstItem="Fli-aZ-CgL" firstAttribute="leading" secondItem="639-OQ-IJG" secondAttribute="trailing" constant="4" id="LBb-FB-Yzq"/>
+                            <constraint firstItem="639-OQ-IJG" firstAttribute="centerY" secondItem="Fli-aZ-CgL" secondAttribute="centerY" id="PmT-qS-ykv"/>
                             <constraint firstItem="eca-BC-9lx" firstAttribute="centerX" secondItem="HfM-NY-bdW" secondAttribute="centerX" id="ROI-kL-p4B"/>
+                            <constraint firstItem="639-OQ-IJG" firstAttribute="centerX" secondItem="HfM-NY-bdW" secondAttribute="centerX" id="V34-lY-sew"/>
+                            <constraint firstItem="639-OQ-IJG" firstAttribute="leading" secondItem="g1U-Lq-mEU" secondAttribute="trailing" constant="1" id="dWA-OL-Zs8"/>
                             <constraint firstItem="Qeq-rx-fv7" firstAttribute="top" secondItem="dnj-TM-A4K" secondAttribute="bottom" constant="20" id="fdM-cm-MEX"/>
                             <constraint firstItem="dnj-TM-A4K" firstAttribute="centerX" secondItem="HfM-NY-bdW" secondAttribute="centerX" id="jo4-4z-HCn"/>
                             <constraint firstItem="dnj-TM-A4K" firstAttribute="top" secondItem="eca-BC-9lx" secondAttribute="bottom" constant="10" id="lwn-J3-pUM"/>
                             <constraint firstItem="Kr5-pk-lMU" firstAttribute="centerY" secondItem="HfM-NY-bdW" secondAttribute="centerY" constant="-40" id="qA8-kE-na7"/>
                             <constraint firstItem="Kr5-pk-lMU" firstAttribute="centerX" secondItem="HfM-NY-bdW" secondAttribute="centerX" id="sEF-7A-qEh"/>
+                            <constraint firstItem="Fli-aZ-CgL" firstAttribute="top" secondItem="qRk-J7-DUb" secondAttribute="bottom" constant="40" id="shQ-Eo-Thb"/>
                             <constraint firstItem="xeY-bf-V4v" firstAttribute="centerX" secondItem="HfM-NY-bdW" secondAttribute="centerX" id="vcT-Fi-dw7"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
@@ -775,6 +793,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="iconTransparent" width="2718" height="3118"/>
         <image name="settingCheckMark" width="267" height="267"/>
     </resources>
 </document>

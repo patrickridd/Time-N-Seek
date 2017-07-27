@@ -167,10 +167,10 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func displayDistance(for beacon: CLBeacon) {
         if distanceSetting == .feet {
         let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: beacon.accuracy))
-        statusLabel.text = "Hider is \(accuracyInFeet)ft away".localized
+        statusLabel.text = "Hider is \(accuracyInFeet) ft away".localized
         } else {
             let accuracyInMeters = String(format: "%.2f",beacon.accuracy)
-            self.statusLabel.text = "Hider is \(accuracyInMeters)m away".localized
+            self.statusLabel.text = "Hider is \(accuracyInMeters) m away".localized
         }
     }
     
@@ -228,6 +228,8 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         self.setButtonToWon()
        
         statusLabel.text = "You found the Hider!!".localized
+        instructionsLabel.text = ""
+        
         self.blinkStatusLabel()
         
         setBackButtonToReset()
@@ -256,7 +258,9 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         self.removeBlinkingSeekAnimation()
         self.setButtonToLost()
         
-        self.statusLabel.text = "You Lost!!!".localized
+        self.statusLabel.text = "Time's up...".localized
+        instructionsLabel.text = ""
+
         self.blinkStatusLabel()
         
         // If Hider doesn't know they've won yet, then Broadcast to Hider that Hider won
@@ -347,7 +351,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         self.backButton.isHidden = false
         self.setButtonToSeeking()
         self.delayWithSeconds(2, completion: {
-            self.statusLabel.text = "Locating Hider".localized
+            self.statusLabel.text = "Locating Hider..".localized
             var distance = "1 feet"
             if self.distanceSetting == .meters { distance = "0.3 meters".localized }
             self.instructionsLabel.text = "Get within \(distance) of Hider".localized
@@ -388,7 +392,8 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         if seekerWon || seekerLost || gameReset { return }
 
         if elapsedTimeInSecond == self.startTime {
-            self.instructionsLabel.text = ""
+            removeBlinkingSeekAnimation()
+            self.instructionsLabel.text = "Distances fluctuate rapidly".localized
             startTimer()
         }
         
@@ -407,7 +412,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         
         if hiderBeacon.major == 666 {
             shouldBroadcastResult = false
-            self.instructionsLabel.text = ""
             presentSeekerWon()
             return true
         }
@@ -415,7 +419,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         if distanceSetting == .feet {
             let accuracyInFeet = String(format: "%.2f", self.metersToFeet(distanceInMeters: hiderBeacon.accuracy))
             if accuracyInFeet < "1.00" {
-                self.instructionsLabel.text = "Within distance: \(accuracyInFeet)ft".localized
                 shouldBroadcastResult = true
                 presentSeekerWon()
                 return true
@@ -423,7 +426,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
         } else {
             let accuracyInMeters = String(format: "%.2f", hiderBeacon.accuracy)
             if accuracyInMeters < "0.3" {
-                instructionsLabel.text = "Within distance: \(accuracyInMeters)m".localized
                 shouldBroadcastResult = true
                 presentSeekerWon()
                 return true
@@ -435,7 +437,6 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     func determineIfSeekerLost(hiderBeacon: CLBeacon) -> Bool {
         if hiderBeacon.major == 777 {
             shouldBroadcastResult = false
-            self.instructionsLabel.text = "Hider broadcast they won"
             presentSeekerLost()
             return true
         } else {
@@ -662,6 +663,10 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
     }
     
     func updateGameBasedOnTime() {
+        
+        if self.elapsedTimeInSecond == startTime - 5 {
+            self.instructionsLabel.text = ""
+        }
         if self.elapsedTimeInSecond == 10 {
             SoundsController.sharedController.play(sound: .runningOutOfTime)
             self.seekButton.setTitleColor(UIColor.burntOrange, for: .normal)
@@ -674,6 +679,7 @@ class SeekerViewController: UIViewController, CLLocationManagerDelegate, CBPerip
             self.shouldBroadcastResult = true
             self.presentSeekerLost()
         }
+        
     }
     
     func pauseTimer() {

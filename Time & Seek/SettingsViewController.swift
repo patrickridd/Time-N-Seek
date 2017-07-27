@@ -17,6 +17,7 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
 
         self.closeButton.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        self.closeButton.setTitleColor(.geraldine, for: .normal)
     }
     
     func didTapCloseButton() {
