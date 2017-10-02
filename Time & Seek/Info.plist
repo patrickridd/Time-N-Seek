@@ -17,11 +17,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
-	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.2</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>We need Bluetooth access to broadcast position between players</string>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera to scan the Hiders Beacon ID</string>
 	<key>NSLocationAlwaysUsageDescription</key>
